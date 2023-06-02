@@ -59,7 +59,7 @@ function createWindow() {
   //mainWindow.loadFile('./index_wd.html');
   // let devtools = new BrowserWindow();
   // mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   if (!MAIN) MAIN = mainWindow
   group.set(partition, true)
@@ -188,6 +188,7 @@ ipcMain.on('createWindow', function (event, obj) {
   // MAIN.webContents.send('create', 'Main进程主动发送的消息')
   createWindow()
 })
+
 ipcMain.on('window-close', function (event, partition) {
   group.delete(partition)
 })

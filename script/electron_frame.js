@@ -78,6 +78,23 @@ const menuContextTemplate = [
         }
       }
     ]
+  },
+  {
+    label: '加载记牌器',
+    click: () => {
+      let webview = document.getElementById('wb')
+      webview.executeJavaScript(`fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })`)
+      .then(() => {
+        console.log('记牌器加载')
+      })
+    }
   }
 ]
 const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
@@ -191,8 +208,8 @@ function initElectronFrame() {
     // }
     console.log('dom-ready')
     webview.executeJavaScript(`
-window.WDVerSion =  "1.0.0"
-console.info('--wd --> ', window.location)
+      window.WDVerSion =  "1.0.0"
+      console.info('--wd --> ', window.location)
   fetch("https://cas.dobest.cn/cas/logout?url=https%3A%2F%2Fweb.sanguosha.com%2Findex.html", {
     "referrer": "https://web.sanguosha.com/",
     "referrerPolicy": "strict-origin-when-cross-origin",
@@ -285,7 +302,6 @@ if (window.location.pathname === '/login/air/client/h5/index') {
   let userlist = getData()
   load()
 }
-
 `)
   })
 }
