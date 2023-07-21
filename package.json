@@ -1,0 +1,30 @@
+{
+  "name": "mengchu",
+  "version": "1.0.0",
+  "description": "sgs",
+  "main": "main.js",
+  "packageId": 1,
+  "?packageId": "1: 官方Win包 2: 官方Mac包 3:4399Win包 4：4399Mac包 5:快播win 6:快播mac 7:飞火win  8:飞火mac 9:百度win 10:百度mac",
+  "LoginURL": [
+    "https://web.sanguosha.com/login/air/client/h5/index",
+    "https://web.sanguosha.com/login/air/client/h5/index",
+    "https://my.4399.com/yxsgs/wd-home",
+    "https://my.4399.com/yxsgs/wd-home",
+    "http://web.kuaiwan.com/kwsgsn/index.html",
+    "http://web.kuaiwan.com/kwsgsn/index.html",
+    "https://web.sanguosha.com/login/air/feihuo/client/index",
+    "https://web.sanguosha.com/login/air/feihuo/client/index",
+    "https://wan.baidu.com/microend?gameId=19793595",
+    "https://wan.baidu.com/microend?gameId=19793595"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager ./ SGSOL --platform=win32 --out ./OutApp --electron-version 9.4.4 --overwrite --icon=./icon.ico"
+  },
+  "author": "ll",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^9.4.4",
+    "electron-packager": "^12.1.0"
+  }
+}
