@@ -20,7 +20,6 @@ function jumpChagre() {
 
 /*window.onresize = function () {
 }*/
-
 ipcRenderer.on('downloadProgress', (event, progressObj) => {
   console.log(progressObj)
 })
@@ -30,6 +29,24 @@ ipcRenderer.on('resize', (e, msg) => {
 ipcRenderer.on('create', (e, msg) => {
   console.log('create', msg)
 })
+
+function loadingDeck() {
+  let webview = document.getElementById('wb')
+  webview
+    .executeJavaScript(
+      `fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })`
+    )
+    .then(() => {
+      console.log('记牌器加载')
+    })
+}
 
 const menuContextTemplate = [
   {
@@ -82,18 +99,7 @@ const menuContextTemplate = [
   {
     label: '加载记牌器',
     click: () => {
-      let webview = document.getElementById('wb')
-      webview.executeJavaScript(`fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
-      .then(data => {
-        let script = document.createElement('script')
-        script.type = 'text/javascript'
-        let src = document.createTextNode(data)
-        script.appendChild(src)
-        document.body.appendChild(script)
-      })`)
-      .then(() => {
-        console.log('记牌器加载')
-      })
+      loadingDeck()
     }
   }
 ]
