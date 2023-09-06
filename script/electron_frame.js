@@ -3,7 +3,8 @@ const { Menu, dialog } = remote
 const W = remote.getCurrentWindow()
 //const shell = remote.require('shell');
 const partition = remote.getGlobal('partition')
-// let isDeBug = remote.getGlobal('IsDebug')
+const webview = document.getElementById('wb')
+
 function loadElectronFrame() {
   initElectronFrame()
   //  ipcRenderer.send("checkForUpdate");
@@ -12,14 +13,9 @@ function loadElectronFrame() {
 window.loadElectronFrame = loadElectronFrame
 
 function jumpChagre() {
-  var webview = document.getElementById('wb')
   webview.send('WDCharge', '打印成功')
-  //ChannelUtils.OpenPay();
-  //shell.openExternal("http://www.sanguosha.com")
 }
 
-/*window.onresize = function () {
-}*/
 ipcRenderer.on('downloadProgress', (event, progressObj) => {
   console.log(progressObj)
 })
@@ -31,7 +27,6 @@ ipcRenderer.on('create', (e, msg) => {
 })
 
 function loadingDeck() {
-  let webview = document.getElementById('wb')
   webview
     .executeJavaScript(
       `fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
@@ -101,9 +96,25 @@ const menuContextTemplate = [
     click: () => {
       loadingDeck()
     }
+  },
+  {
+    label: '修改尺寸',
+    click: () => {
+      changeSize()
+    }
   }
 ]
 const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
+
+function changeSize() {
+  webview.executeJavaScript(`
+  if(window.SystemContext){
+    window.SystemContext.GAME_MIN_WIDTH = 1100
+    window.SystemContext.GAME_MIN_HEIGHT = 670
+  }`).then(() => {
+    W.setBounds({ width: 1100, height: 700 })
+  })
+}
 
 window.onload = () => {
   console.log('window-onload:', partition)
@@ -188,7 +199,6 @@ function initElectronFrame() {
   }
 
   let WDVerTxt = document.getElementById('WDVerSion')
-  let webview = document.getElementById('wb')
 
   WDVerTxt.innerHTML = '三国杀' + partition
   document.title = '三国杀' + partition

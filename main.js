@@ -9,16 +9,10 @@ app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // let mainWindow
 const package = require('./package.json')
-global.Version = package.version
-global.IsTest = package.IsTest
 global.PackageId = package.packageId
 global.URLOffTest = package.URLOffTest
 global.URLLYTest = package.URLLYTest
-global.AutoUpdaterURL = package.AutoUpdaterURL
-global.JumpURL = package.JumpURL
-global.FeedURL = package.FeedURL
 global.LoginURL = package.LoginURL
-global.IsDebug = package.IsDebug
 global.partition = 1
 const group = new Map()
 let MAIN = null
@@ -33,8 +27,8 @@ function createWindow() {
   }
   console.log('createWindow')
   let mainWindow = new BrowserWindow({
-    width: 1030,
-    height: 670,
+    width: 1220,
+    height: 762,
     frame: false,
     resizable: true,
     titleBarStyle: 'customButtonOnHover',
