@@ -3,7 +3,9 @@ const { Menu, dialog } = remote
 const W = remote.getCurrentWindow()
 //const shell = remote.require('shell');
 const partition = remote.getGlobal('partition')
-const webview = document.getElementById('wb')
+let loginURL = remote.getGlobal('LoginURL')
+let loginForm = remote.getGlobal('PackageId')
+let webview
 
 function loadElectronFrame() {
   initElectronFrame()
@@ -102,18 +104,61 @@ const menuContextTemplate = [
     click: () => {
       changeSize()
     }
+  },
+  {
+    label: '切换大区',
+    submenu: [
+      {
+        label: 'ol',
+        click: () => {
+          area(1)
+        }
+      },
+      {
+        label: '百度',
+        click: () => {
+          area(9)
+        }
+      },
+      {
+        label: '4399',
+        click: () => {
+          area(3)
+        }
+      }
+    ]
   }
 ]
 const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
 
 function changeSize() {
-  webview.executeJavaScript(`
+  webview
+    .executeJavaScript(
+      `
   if(window.SystemContext){
     window.SystemContext.GAME_MIN_WIDTH = 1100
     window.SystemContext.GAME_MIN_HEIGHT = 670
-  }`).then(() => {
-    W.setBounds({ width: 1100, height: 700 })
-  })
+  }`
+    )
+    .then(() => {
+      W.setBounds({ width: 1100, height: 700 })
+    })
+}
+
+function area(packageId) {
+  ipcRenderer.send('area', packageId)
+  dialog
+    .showMessageBox(W, {
+      type: 'warning',
+      title: '提示',
+      message: '页面将会刷新',
+      buttons: ['ok', 'cancel']
+    })
+    .then((data) => {
+      if (data.response == 0) {
+        webview.loadURL(loginURL[packageId - 1])
+      }
+    })
 }
 
 window.onload = () => {
@@ -130,6 +175,9 @@ window.onload = () => {
 
 function initElectronFrame() {
   console.log('初始化')
+  let WDVerTxt = document.getElementById('WDVerSion')
+  webview = document.getElementById('wb')
+
   var max = document.getElementById('max')
   if (max) {
     max.addEventListener('click', () => {
@@ -194,35 +242,18 @@ function initElectronFrame() {
             W.close()
           }
         })
-      // confirm("是否确定退出游戏") ? W.close() : void(0)
     })
   }
 
-  let WDVerTxt = document.getElementById('WDVerSion')
-
-  WDVerTxt.innerHTML = '三国杀' + partition
-  document.title = '三国杀' + partition
+  WDVerTxt.innerHTML = document.title = '三国杀' + partition
   webview.partition = 'persist:sgs' + partition
 
-  var loginURL = remote.getGlobal('LoginURL')
-  var loginForm = remote.getGlobal('PackageId')
-  if (remote.getGlobal('IsTest')) {
-    if (loginForm == 1 || loginForm == 2) {
-      webview.src = remote.getGlobal('URLOffTest')
-    } else {
-      webview.src = remote.getGlobal('URLLYTest')
-    }
-  } else {
-    webview.src = loginURL[loginForm - 1]
-  }
+  webview.src = loginURL[loginForm - 1]
 
-  //webview.setAttribute("IsDebug", isDeBug)
   webview.addEventListener('dom-ready', function () {
-    // if (isDeBug) {
     // webview.openDevTools({ mode: 'detach' })
-    // isDeBug = null
-    // }
     console.log('dom-ready')
+
     webview.executeJavaScript(`
       window.WDVerSion =  "1.0.0"
       console.info('--wd --> ', window.location)

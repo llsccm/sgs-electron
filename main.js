@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, shell } = require('electron')
+const fs = require('fs')
 //const { crashReporter } = require('electron')
 const path = require('path')
 
@@ -9,19 +10,27 @@ app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // let mainWindow
 const package = require('./package.json')
-global.PackageId = package.packageId
-global.URLOffTest = package.URLOffTest
-global.URLLYTest = package.URLLYTest
 global.LoginURL = package.LoginURL
 global.partition = 1
 const group = new Map()
 let MAIN = null
+let config = {}
+let configPath = path.join(path.dirname(app.getPath('exe')), 'config.json')
+
+function readConfig() {
+  if (fs.existsSync(configPath)) {
+    config = JSON.parse(fs.readFileSync(configPath)) || {}
+  }
+}
+readConfig()
+global.PackageId = config.packageId || package.packageId
+
 function createWindow() {
   // Create the browser window.
   let x, y
   const currentWindow = BrowserWindow.getFocusedWindow()
   if (currentWindow) {
-    const [curWndX, curWndY] = currentWindow.getPosition();
+    const [curWndX, curWndY] = currentWindow.getPosition()
     x = curWndX + 25
     y = curWndY + 25
   }
@@ -138,7 +147,6 @@ if (!gotTheLock) {
           return
         }
       }
-      
     }
   })
 }
@@ -185,4 +193,8 @@ ipcMain.on('createWindow', function (event, obj) {
 
 ipcMain.on('window-close', function (event, partition) {
   group.delete(partition)
+})
+
+ipcMain.on('area', function (event, packageId) {
+  fs.writeFileSync(configPath, JSON.stringify({ packageId }))
 })
