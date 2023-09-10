@@ -8,6 +8,7 @@ const path = require('path')
 app.commandLine.appendSwitch('--no-sandbox')
 app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
+app.allowRendererProcessReuse = false
 // let mainWindow
 const package = require('./package.json')
 global.LoginURL = package.LoginURL

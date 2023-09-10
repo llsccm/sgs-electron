@@ -94,18 +94,6 @@ const menuContextTemplate = [
     ]
   },
   {
-    label: '加载记牌器',
-    click: () => {
-      loadingDeck()
-    }
-  },
-  {
-    label: '修改尺寸',
-    click: () => {
-      changeSize()
-    }
-  },
-  {
     label: '切换大区',
     submenu: [
       {
@@ -127,6 +115,18 @@ const menuContextTemplate = [
         }
       }
     ]
+  },
+  {
+    label: '加载记牌器',
+    click: () => {
+      loadingDeck()
+    }
+  },
+  {
+    label: '修改尺寸',
+    click: () => {
+      changeSize()
+    }
   }
 ]
 const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
