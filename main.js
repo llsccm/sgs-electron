@@ -91,6 +91,7 @@ function createWindow() {
     mainWindow.webContents.send('resize', 1)
     //crashReporter.addExtraParameter("whlie", "main");
   })
+
   // 屏蔽窗口菜单（-webkit-app-region: drag）
   mainWindow.hookWindowMessage(278, function (e) {
     mainWindow.setEnabled(false)
@@ -99,38 +100,6 @@ function createWindow() {
     }, 100)
     return true
   })
-  //updateHandle();
-  // ipcMain.on('main-render', (event) => {
-  //   mainWindow.webContents.send('list', 'Main进程主动发送的消息')
-  // })
-  // //接收最小化命令
-  // ipcMain.on('window-min', function (event, {w}) {
-  //   w.minimize()
-  // })
-  // //接收最大化命令
-  // ipcMain.on('window-max', function (event, {w}) {
-  //   if (w.isMaximized()) {
-  //     w.restore()
-  //   } else {
-  //     w.maximize()
-  //   }
-  // })
-  // //接收关闭命令
-  // ipcMain.on('window-close', function (event, {w}) {
-  //   console.log('关闭游戏')
-  //   dialog
-  //     .showMessageBox(w, {
-  //       type: 'warning',
-  //       title: '提示',
-  //       message: '是否确定退出游戏',
-  //       buttons: ['ok', 'cancel']
-  //     })
-  //     .then((index) => {
-  //       if (index.response == 0) {
-  //         w.close()
-  //       }
-  //     })
-  // })
 }
 
 const gotTheLock = app.requestSingleInstanceLock()
