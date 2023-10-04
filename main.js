@@ -107,15 +107,11 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    if (MAIN) {
-      if (MAIN.isMinimized()) MAIN.restore()
-      MAIN.focus()
-      for (let index = 1; index <= 8; index++) {
-        if (!group.has(index)) {
-          partition = index
-          createWindow()
-          return
-        }
+    for (let index = 1; index <= 8; index++) {
+      if (!group.has(index)) {
+        partition = index
+        createWindow()
+        return
       }
     }
   })
