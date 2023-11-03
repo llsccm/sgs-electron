@@ -86,7 +86,7 @@ const menuContextTemplate = [
     ]
   },
   {
-    label: '切换大区',
+    label: '跳转页面',
     submenu: [
       {
         label: 'ol',
@@ -104,6 +104,29 @@ const menuContextTemplate = [
         label: '4399',
         click: () => {
           area(3)
+        }
+      }
+    ]
+  },
+  {
+    label: '切换配置',
+    submenu: [
+      {
+        label: 'ol',
+        click: () => {
+          area(1, true)
+        }
+      },
+      {
+        label: '百度',
+        click: () => {
+          area(9, true)
+        }
+      },
+      {
+        label: '4399',
+        click: () => {
+          area(3, true)
         }
       }
     ]
@@ -137,8 +160,8 @@ function changeSize() {
     })
 }
 
-function area(packageId) {
-  ipcRenderer.send('area', packageId)
+function area(packageId, isSave = false) {
+  isSave && ipcRenderer.send('area', packageId)
   dialog
     .showMessageBox(W, {
       type: 'warning',
