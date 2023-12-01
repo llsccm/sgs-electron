@@ -1,26 +1,37 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, shell, session } = require('electron')
 const fs = require('fs')
 //const { crashReporter } = require('electron')
 const path = require('path')
+const package = require('./package.json')
 
 //app.commandLine.appendSwitch("--disable-http-cache");
 app.commandLine.appendSwitch('--no-sandbox')
 app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 app.allowRendererProcessReuse = false
-// let mainWindow
-const package = require('./package.json')
+
 global.LoginURL = package.LoginURL
 global.partition = 1
 const group = new Map()
 let MAIN = null
 let config = {}
-let configPath = path.join(path.dirname(app.getPath('exe')), 'config.json')
+let afterjs = false
+const programDir = path.dirname(app.getPath('exe')) // 程序目录
+const configPath = path.join(programDir, 'config.json') // 配置文件
+const pluginPath = path.join(programDir, '/resources/plugin.json')
 
 function readConfig() {
   if (fs.existsSync(configPath)) {
     config = JSON.parse(fs.readFileSync(configPath)) || {}
+  }
+  if (fs.existsSync(path.join(programDir, '/resources/after.js'))) {
+    console.log('after.js')
+    afterjs = true
+  }
+  if (fs.existsSync(pluginPath)) {
+    const obj = JSON.parse(fs.readFileSync(pluginPath))
+    global.plugins = obj.plugins || []
   }
 }
 readConfig()
@@ -143,6 +154,30 @@ app.on('web-contents-created', (e, webContents) => {
   })
 })
 
+app.whenReady().then(() => {
+  const filter = {
+    urls: ['*://web.sanguosha.com/*'] // 要拦截的地址
+  }
+  const ses = session.fromPartition('persist:sgs1')
+  //注册自定义协议并拦截基于现有协议的请求
+  ses.protocol.registerFileProtocol('atom', (request, callback) => {
+    const url = request.url.replace('atom://', '')
+    const filePath = path.join(programDir, `/resources/${url}`)
+    callback({ path: filePath })
+  })
+  ses.webRequest.onBeforeRequest(filter, (details, callback) => {
+    // details.url返回的是上面filter.urls里需要拦截的所有接口
+    // console.log(details.url)
+    if (details.url.includes('web.sanguosha.com/220/h5_2/libs/after.js') && afterjs) {
+      callback({
+        // redirectURL使用自定义的atom协议
+        redirectURL: 'atom://after.js'
+      })
+    } else {
+      callback({ requestHeaders: details.requestHeaders })
+    }
+  })
+})
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
@@ -153,7 +188,6 @@ function sendUpdateMessage(text) {
 
 ipcMain.on('createWindow', function (event, obj) {
   partition = obj.partition
-  // MAIN.webContents.send('create', 'Main进程主动发送的消息')
   createWindow()
 })
 

@@ -1,6 +1,6 @@
 {
   "name": "SGSOL",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "packageId": 1,
   "?packageId": "1: 官方Win包 2: 官方Mac包 3:4399Win包 4：4399Mac包 5:快播win 6:快播mac 7:飞火win  8:飞火mac 9:百度win 10:百度mac",
   "IsTest": false,
@@ -20,47 +20,16 @@
     "https://wan.baidu.com/microend?gameId=19793595",
     "https://wan.baidu.com/microend?gameId=19793595"
   ],
-  "AutoUpdaterURL": [
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/win/official",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/mac/official",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/win/4399",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/mac/4399",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/win/kuaiwan",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/mac/kuaiwan",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/win/feihuo",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/mac/feihuo",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/win/baidu",
-    "https://olh5download.sanguosha.com/olh5/wdUpdate/mac/baidu"
-  ],
-  "JumpURL": [
-    "http://www.sanguosha.com",
-    "http://www.sanguosha.com",
-    "http://my.4399.com/yxsgs/",
-    "http://my.4399.com/yxsgs/",
-    "http://web.kuaiwan.com/kwsgs/",
-    "http://web.kuaiwan.com/kwsgs/",
-    "https://www.feihuo.com/game/index/slug/sgs",
-    "https://www.feihuo.com/game/index/slug/sgs",
-    "http://wan.baidu.com/gamedetail?gameId=19793595&idfrom=3010",
-    "http://wan.baidu.com/gamedetail?gameId=19793595&idfrom=3010"
-  ],
-  "FeedURL": [
-    "http://bug.sanguosha.com/?f=bbs_index",
-    "http://bug.sanguosha.com/?f=bbs_index",
-    "https://u.4399.com/kefu/sgs",
-    "https://u.4399.com/kefu/sgs",
-    "http://wpa.qq.com/msgrd?V=3&uin=800098844&Site=%E5%85%85%E5%80%BC%E5%AE%A2%E6%9C%8D&Menu=yes",
-    "http://wpa.qq.com/msgrd?V=3&uin=800098844&Site=%E5%85%85%E5%80%BC%E5%AE%A2%E6%9C%8D&Menu=yes",
-    "https://www.feihuo.com/service",
-    "https://www.feihuo.com/service",
-    "http://ufo.baidu.com/listen/myhistory?type=myhistory&product_line=90962&appid=239930",
-    "http://ufo.baidu.com/listen/myhistory?type=myhistory&product_line=90962&appid=239930"
-  ],
   "description": "sgs Electron application",
   "main": "main.js",
-  "author": "yoka",
+  "author": "ll",
   "license": "CC0-1.0",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager ./ SGSOL --platform=win32 --out ./OutApp --electron-version 9.4.4 --overwrite --icon=./icon.ico"
+  },
   "dependencies": {
-    "electron-updater": "^4.3.1"
+    "electron": "^9.4.4",
+    "electron-packager": "^12.1.0"
   }
 }
