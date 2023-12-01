@@ -149,11 +149,10 @@ const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
 function changeSize() {
   webview
     .executeJavaScript(
-      `
-  if(window.SystemContext){
-    window.SystemContext.GAME_MIN_WIDTH = 1100
-    window.SystemContext.GAME_MIN_HEIGHT = 670
-  }`
+      `if(window.SystemContext){
+        window.SystemContext.GAME_MIN_WIDTH = 1100
+        window.SystemContext.GAME_MIN_HEIGHT = 670
+      }`
     )
     .then(() => {
       W.setBounds({ width: 1100, height: 700 })
