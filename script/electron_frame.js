@@ -2,9 +2,30 @@ const { ipcRenderer, remote } = require('electron')
 const { Menu, dialog } = remote
 const W = remote.getCurrentWindow()
 const partition = remote.getGlobal('partition')
+const plugins = remote.getGlobal('plugins') || []
 let loginURL = remote.getGlobal('LoginURL')
 let loginForm = remote.getGlobal('PackageId')
-let webview
+let webview = null
+
+const submenuArr = []
+function initPlugins() {
+  submenuArr.push({
+    label: '修改尺寸',
+    click: () => {
+      changeSize()
+    }
+  })
+  if (partition != 1) return
+  plugins.forEach((item) => {
+    submenuArr.push({
+      label: item.name,
+      click: () => {
+        executeJS(item.scripts)
+      }
+    })
+  })
+}
+initPlugins()
 
 function loadElectronFrame() {
   initElectronFrame()
@@ -82,6 +103,12 @@ const menuContextTemplate = [
         click: () => {
           ipcRenderer.send('createWindow', { partition: 8 })
         }
+      },
+      {
+        label: '1',
+        click: () => {
+          ipcRenderer.send('createWindow', { partition: 1 })
+        }
       }
     ]
   },
@@ -138,10 +165,8 @@ const menuContextTemplate = [
     }
   },
   {
-    label: '修改尺寸',
-    click: () => {
-      changeSize()
-    }
+    label: '更多插件',
+    submenu: submenuArr
   }
 ]
 const menuBuilder = Menu.buildFromTemplate(menuContextTemplate)
@@ -275,7 +300,6 @@ function buttonInit() {
 
 function execute() {
   console.log('dom-ready')
-
   webview.executeJavaScript(`window.WDVerSion = '1.0.0'
     console.info('--wd-- ', window.location)
     fetch('https://cas.dobest.cn/cas/logout?url=https%3A%2F%2Fweb.sanguosha.com%2Findex.html', {
@@ -356,7 +380,6 @@ function execute() {
             break
         }
         function auto(target) {
-          console.log(userlist[target.dataset.index])
           account.value = userlist[target.dataset.index].account
           password.value = userlist[target.dataset.index].password
           manager.classList.toggle('hidden')
@@ -384,4 +407,8 @@ function execute() {
       load()
     }
   `)
+}
+
+function executeJS(str) {
+  webview.executeJavaScript(str)
 }

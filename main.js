@@ -25,10 +25,9 @@ function readConfig() {
   if (fs.existsSync(configPath)) {
     config = JSON.parse(fs.readFileSync(configPath)) || {}
   }
-  if (fs.existsSync(path.join(programDir, '/resources/after.js'))) {
-    console.log('after.js')
-    afterjs = true
-  }
+  const afterPath = path.join(programDir, '/resources/after.js')
+  if (!fs.existsSync(afterPath)) return
+  afterjs = true
   if (fs.existsSync(pluginPath)) {
     const obj = JSON.parse(fs.readFileSync(pluginPath))
     global.plugins = obj.plugins || []
