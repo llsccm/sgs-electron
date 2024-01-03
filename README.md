@@ -1,4 +1,4 @@
-## 三国杀 online 微端
+## 三国杀online 微端
 
 基于三国杀官方微端，新增部分功能
 
@@ -14,9 +14,12 @@
 ### 使用
 
 1. 下载
-[Releases](https://github.com/llsccm/sgs-Electron/releases) 中打包好的 app.asar 文件
+
+   [Releases](https://github.com/llsccm/sgs-Electron/releases) 中打包好的 app.asar 文件
+
 2. 替换资源
-将 app.asar 文件移动至官方微端目录下 resources 文件夹，替换原文件
+
+   将 app.asar 文件移动至官方微端目录下 resources 文件夹，替换原文件
 
 ### 鸣谢
 

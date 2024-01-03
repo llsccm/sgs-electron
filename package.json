@@ -1,6 +1,7 @@
 {
   "name": "SGSOL",
   "version": "1.0.8",
+  "private": true,
   "packageId": 1,
   "?packageId": "1: 官方Win包 2: 官方Mac包 3:4399Win包 4：4399Mac包 5:快播win 6:快播mac 7:飞火win  8:飞火mac 9:百度win 10:百度mac",
   "IsTest": false,
@@ -28,8 +29,8 @@
     "start": "electron .",
     "package": "electron-packager ./ SGSOL --platform=win32 --out ./OutApp --electron-version 9.4.4 --overwrite --icon=./icon.ico"
   },
-  "dependencies": {
+  "devDependencies": {
     "electron": "^9.4.4",
-    "electron-packager": "^12.1.0"
+    "electron-packager": "^12.1.2"
   }
 }
