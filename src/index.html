@@ -44,27 +44,27 @@
         -webkit-user-drag: none;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="./src/utils/Dialog/cxdialog.min.css">
+    <link rel="stylesheet" type="text/css" href="./utils/Dialog/cxdialog.min.css">
   </head>
 
   <body>
     <div id="bgDiv" style="top: 0px; left: 0px; width: 100%; height: 100%; z-index: -3">
-      <img style="width: 100%; height: 100%" src="res/bg1.png" />
+      <img style="width: 100%; height: 100%" src="./res/bg1.png" />
     </div>
     <webview id="wb" style="position: absolute; top: 30px; left: 0px; bottom: 0px; width: 100%" allowpopups></webview>
     <div id="topDiv" style="top: 0px; left: 0px; width: 100%; height: 30px;">
-      <img style="width: 100%; height: 30px; -webkit-app-region: drag;" src="res/bg2.png" />
-      <img style="width: 743px; height: 13px; left: 328px" src="res/bg3.png" />
-      <img style="width: 25px; height: 25px; left: 4px; top: 4px" src="res/smallicon.png" />
+      <img style="width: 100%; height: 30px; -webkit-app-region: drag;" src="./res/bg2.png" />
+      <img style="width: 743px; height: 13px; left: 328px" src="./res/bg3.png" />
+      <img style="width: 25px; height: 25px; left: 4px; top: 4px" src="./res/smallicon.png" />
       <span id="WDVerSion" style="left: 30px; top: 0px;">三国杀</span>
       <!-- <button id='button123' style="position: absolute;left:80px;top:5px;">111</button> -->
       <div id="eRightTopDiv" style="top: 0px; right: 0px; width: 85px; height: 20px; z-index: 100003;">
-        <input id="min" style="left: 20px; top: 10px; width: 15px; height: 15px" type="image" src="res/button_09.png" onmousemove="this.src='res/button_10.png'" onmouseout="this.src='res/button_09.png'" />
-        <input id="max" name="min" style="left: 40px; top: 10px; width: 15px; height: 15px" type="image" src="res/button_01.png" />
-        <input id="close" style="left: 60px; top: 10px; width: 15px; height: 15px" type="image" src="res/button_13.png" onmousemove="this.src= 'res/button_14.png'" onmouseout="this.src='res/button_13.png'" />
+        <input id="min" style="left: 20px; top: 10px; width: 15px; height: 15px" type="image" src="./res/button_09.png" onmousemove="this.src='./res/button_10.png'" onmouseout="this.src='./res/button_09.png'" />
+        <input id="max" name="min" style="left: 40px; top: 10px; width: 15px; height: 15px" type="image" src="./res/button_01.png" />
+        <input id="close" style="left: 60px; top: 10px; width: 15px; height: 15px" type="image" src="./res/button_13.png" onmousemove="this.src= './res/button_14.png'" onmouseout="this.src='./res/button_13.png'" />
       </div>
     </div>
   </body>
-  <script type="text/javascript" src="./src/utils/Dialog/cxdialog.min.js"></script>
-  <script type="text/javascript" src="./script/renderer.js"></script>
+  <script type="text/javascript" src="./utils/Dialog/cxdialog.min.js"></script>
+  <script type="text/javascript" src="./renderer.js"></script>
 </html>

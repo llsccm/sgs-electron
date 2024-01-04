@@ -1,20 +1,19 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron')
 const path = require('path')
 const fs = require('fs')
-const package = require('../../package.json')
 const createWindow = require('./window')
 const programDir = path.dirname(app.getPath('exe')) // 程序目录
 const configPath = path.join(programDir, 'config.json') // 配置文件
 const pluginPath = path.join(programDir, '/resources/plugin.json')
-const loginURL = package.LoginURL
-let PackageId = package.packageId
+const urlList = ['https://web.sanguosha.com/login/air/client/h5/index', 'https://web.sanguosha.com/login/air/client/h5/index', 'https://my.4399.com/yxsgs/wd-home', 'https://my.4399.com/yxsgs/wd-home', 'http://web.kuaiwan.com/kwsgsn/index.html', 'http://web.kuaiwan.com/kwsgsn/index.html', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://wan.baidu.com/microend?gameId=19793595', 'https://wan.baidu.com/microend?gameId=19793595']
 let config = {}
+global.loginURL = 'https://web.sanguosha.com/login/air/client/h5/index'
 
 function configInit() {
   if (fs.existsSync(configPath)) {
     config = JSON.parse(fs.readFileSync(configPath)) || {}
-    PackageId = config.packageId || package.packageId
-    global.URL = loginURL[PackageId - 1]
+    let PackageId = config.packageId || 1
+    global.loginURL = urlList[PackageId - 1]
   }
 }
 configInit()
@@ -30,8 +29,8 @@ function changeChannel(window, packageId, isSave = false) {
     .then((data) => {
       if (data.response == 0) {
         if (isSave) fs.writeFileSync(configPath, JSON.stringify({ packageId }))
-        const url = loginURL[packageId - 1]
-        window.webContents.send('rendererMsg','channel', url)
+        const url = urlList[packageId - 1]
+        window.webContents.send('rendererMsg', 'channel', url)
       }
     })
 }
@@ -163,7 +162,7 @@ module.exports = {
         {
           label: '加载记牌器',
           click: () => {
-            window.webContents.send('rendererMsg','loadingDeck')
+            window.webContents.send('rendererMsg', 'loadingDeck')
           }
         },
         {
@@ -172,7 +171,7 @@ module.exports = {
             {
               label: '修改尺寸',
               click: () => {
-                webContents.send('rendererMsg','changeSize')
+                webContents.send('rendererMsg', 'changeSize')
               }
             },
             ...submenuArr

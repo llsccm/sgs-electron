@@ -11,25 +11,25 @@ function buttonInit() {
         max.setAttribute('name', 'max')
       }
       if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', 'res/button_05.png')
+        max.setAttribute('src', './res/button_05.png')
       } else {
-        max.setAttribute('src', 'res/button_01.png')
+        max.setAttribute('src', './res/button_01.png')
       }
     })
 
     max.addEventListener('mousemove', () => {
       //最大化图形切换
       if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', 'res/button_06.png')
+        max.setAttribute('src', './res/button_06.png')
       } else {
-        max.setAttribute('src', 'res/button_02.png')
+        max.setAttribute('src', './res/button_02.png')
       }
     })
     max.addEventListener('mouseout', () => {
       if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', 'res/button_05.png')
+        max.setAttribute('src', './res/button_05.png')
       } else {
-        max.setAttribute('src', 'res/button_01.png')
+        max.setAttribute('src', './res/button_01.png')
       }
     })
   }

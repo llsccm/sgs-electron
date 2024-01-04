@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { BrowserWindow } = require('electron')
 const path = require('path')
 const group = new Map()
 global.partition = 1
@@ -33,12 +33,12 @@ function createElectronWindow(index) {
       nativeWindowOpen: true, //是否使用原生的window.open()
       plugins: true, //是否支持插件
       sandbox: true, //沙盒选项,这个很重要
-      preload: path.join(app.getAppPath(), './script/preload.js')
+      preload: path.join(__dirname, './preload.js')
       // allowRunningInsecureContent: true,
       // allowDisplayingInsecureContent :true
     }
   })
-  mainWindow.loadFile(path.join(app.getAppPath(), './index.html'))
+  mainWindow.loadFile(path.join(__dirname,'../index.html'))
   // let devtools = new BrowserWindow();
   // mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
   // mainWindow.webContents.openDevTools()
@@ -59,10 +59,10 @@ function createElectronWindow(index) {
     mainWindow = null
   })
 
-  mainWindow.webContents.on('crashed', function () {
-    console.log('crashed')
-    //crashReporter.addExtraParameter("whlie", "main");
-  })
+  // mainWindow.webContents.on('crashed', function () {
+  //   console.log('crashed')
+  //   //crashReporter.addExtraParameter("whlie", "main");
+  // })
 
   // mainWindow.webContents.on('resize', function () {
   //   console.log('win resize')

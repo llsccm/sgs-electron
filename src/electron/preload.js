@@ -1,6 +1,6 @@
 const { ipcRenderer, remote } = require('electron')
 const partition = remote.getGlobal('partition')
-const URL = remote.getGlobal('URL')
+const loginURL = remote.getGlobal('loginURL')
 let webview = null
 
 function loadElectronFrame() {
@@ -83,7 +83,7 @@ function initElectronFrame() {
 
   webview = document.getElementById('wb')
   webview.partition = 'persist:sgs' + partition
-  webview.src = URL
+  webview.src = loginURL
   webview.addEventListener('dom-ready', execute)
 
   function execute() {
