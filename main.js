@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, shell, session } = require('electron')
+const { app, shell, session, BrowserWindow } = require('electron')
 //const { crashReporter } = require('electron')
 const path = require('path')
 const fs = require('fs')
@@ -13,7 +13,7 @@ let afterjs = false
 app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // 中文环境下不能替换字体
-app.commandLine.appendSwitch('lang','en')
+app.commandLine.appendSwitch('lang', 'en')
 app.allowRendererProcessReuse = false
 
 function configInit() {
@@ -45,10 +45,9 @@ app.on('window-all-closed', function () {
 })
 
 app.on('activate', function () {
-  console.log('activate')
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  createWindow()
+  if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
 app.on('web-contents-created', (e, webContents) => {
@@ -85,11 +84,11 @@ app.whenReady().then(() => {
       callback({ requestHeaders: details.requestHeaders })
     }
   })
+  ipcEvent.init()
   createWindow(1)
 })
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-ipcEvent.init()
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)

@@ -33,13 +33,12 @@ function createElectronWindow(index) {
       nativeWindowOpen: true, //是否使用原生的window.open()
       plugins: true, //是否支持插件
       sandbox: true, //沙盒选项,这个很重要
-      preload: path.join(app.getAppPath(), './script/electron_frame.js')
+      preload: path.join(app.getAppPath(), './script/preload.js')
       // allowRunningInsecureContent: true,
       // allowDisplayingInsecureContent :true
     }
   })
-  mainWindow.loadFile(path.join(app.getAppPath(), './index_wd.html'))
-  //mainWindow.loadFile('./index_wd.html');
+  mainWindow.loadFile(path.join(app.getAppPath(), './index.html'))
   // let devtools = new BrowserWindow();
   // mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
   // mainWindow.webContents.openDevTools()
@@ -65,11 +64,11 @@ function createElectronWindow(index) {
     //crashReporter.addExtraParameter("whlie", "main");
   })
 
-  mainWindow.webContents.on('resize', function () {
-    console.log('win resize')
-    mainWindow.webContents.send('resize', 1)
-    //crashReporter.addExtraParameter("whlie", "main");
-  })
+  // mainWindow.webContents.on('resize', function () {
+  //   console.log('win resize')
+  //   // mainWindow.webContents.send('resize', 1)
+  //   //crashReporter.addExtraParameter("whlie", "main");
+  // })
 
   // 屏蔽窗口菜单（-webkit-app-region: drag）
   mainWindow.hookWindowMessage(278, function (e) {
