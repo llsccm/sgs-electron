@@ -35,35 +35,22 @@ function changeChannel(window, packageId, isSave = false) {
       }
     })
 }
+
 module.exports = {
   windowEventInit() {
     //
     ipcMain.on('window-close', function (e) {
-      const webContents = e.sender
-      const win = BrowserWindow.fromWebContents(webContents)
-      dialog
-        .showMessageBox(win, {
-          type: 'warning',
-          title: '提示',
-          message: '是否确定退出游戏',
-          buttons: ['ok', 'cancel']
-        })
-        .then((data) => {
-          if (data.response == 0) {
-            win.close()
-          }
-        })
+      const win = BrowserWindow.fromWebContents(e.sender)
+      win.close()
     })
     //接收最小化命令
     ipcMain.on('window-min', function (e) {
-      const webContents = e.sender
-      const win = BrowserWindow.fromWebContents(webContents)
+      const win = BrowserWindow.fromWebContents(e.sender)
       win.minimize()
     })
     //接收最大化命令
     ipcMain.on('window-max', function (e) {
-      const webContents = e.sender
-      const win = BrowserWindow.fromWebContents(webContents)
+      const win = BrowserWindow.fromWebContents(e.sender)
       if (win.isMaximized()) {
         win.restore()
       } else {
@@ -72,8 +59,7 @@ module.exports = {
     })
     //
     ipcMain.on('setBounds', function (e) {
-      const webContents = e.sender
-      const win = BrowserWindow.fromWebContents(webContents)
+      const win = BrowserWindow.fromWebContents(e.sender)
       win.setBounds({ width: 1100, height: 700 })
     })
   },

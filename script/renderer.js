@@ -45,7 +45,15 @@ function buttonInit() {
   var close = document.getElementById('close')
   if (close) {
     close.addEventListener('click', () => {
-      sendMsg('window-close')
+      cxDialog({
+        title: '提示',
+        info: '是否确定退出游戏',
+        maskClose: true,
+        ok: () => {
+          sendMsg('window-close')
+        },
+        no: () => {}
+      })
     })
   }
 }
