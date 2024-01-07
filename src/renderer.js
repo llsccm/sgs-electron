@@ -59,4 +59,126 @@ function buttonInit() {
 }
 
 buttonInit()
+
+let menu
+const menutTemplate = [
+  {
+    text: '新建窗口',
+    sub: [
+      {
+        text: '1',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 1)
+          }
+        }
+      },
+      {
+        text: '2',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 2)
+          }
+        }
+      },
+      {
+        text: '3',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 3)
+          }
+        }
+      },
+      {
+        text: '4',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 4)
+          }
+        }
+      },
+      {
+        text: '5',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 5)
+          }
+        }
+      },
+      {
+        text: '6',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 6)
+          }
+        }
+      }
+    ]
+  },
+  {
+    text: '跳转页面',
+    sub: [
+      {
+        text: 'ol',
+        events: {
+          click: () => {
+            channel(1)
+          }
+        }
+      },
+      {
+        text: '4399',
+        events: {
+          click: () => {
+            channel(3)
+          }
+        }
+      },
+      {
+        text: '百度',
+        events: {
+          click: () => {
+            channel(9)
+          }
+        }
+      }
+    ]
+  },
+  {
+    text: '加载记牌器',
+    events: {
+      click: () => {
+        msgList.loadingDeck()
+      }
+    }
+  },
+  {
+    type: 'cm-divider',
+    text: '关闭菜单'
+  }
+]
+
+window.addEventListener('load', function () {
+  menu = new cMenu(menutTemplate)
+  document.getElementById('cmenu').addEventListener(
+    'click',
+    function (e) {
+      menu.toggle(e)
+    },
+    true
+  )
+})
+
 loadElectronFrame()
+
+function channel(packageId) {
+  cxDialog({
+    title: '提示',
+    info: '页面将会刷新',
+    maskClose: true,
+    ok: () => {
+      msgList['channel'](packageId)
+    },
+    no: () => {}
+  })
+}

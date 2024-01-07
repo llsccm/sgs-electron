@@ -1,14 +1,15 @@
 const { ipcRenderer, remote } = require('electron')
 const partition = remote.getGlobal('partition')
-const loginURL = remote.getGlobal('loginURL')
+const packageId = remote.getGlobal('PackageId')
+const urlList = ['https://web.sanguosha.com/login/air/client/h5/index', 'https://web.sanguosha.com/login/air/client/h5/index', 'https://my.4399.com/yxsgs/wd-home', 'https://my.4399.com/yxsgs/wd-home', 'http://web.kuaiwan.com/kwsgsn/index.html', 'http://web.kuaiwan.com/kwsgsn/index.html', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://wan.baidu.com/microend?gameId=19793595', 'https://wan.baidu.com/microend?gameId=19793595']
 let webview = null
 
 function loadElectronFrame() {
   initElectronFrame()
 }
 
-function sendMsg(msg) {
-  ipcRenderer.send(msg)
+function sendMsg(msg,...arg) {
+  ipcRenderer.send(msg,...arg)
 }
 
 window.loadElectronFrame = loadElectronFrame
@@ -47,28 +48,20 @@ const msgList = {
         ipcRenderer.send('setBounds')
       })
   },
-  channel(url) {
-    webview.loadURL(url)
+  channel(packageId) {
+    webview.loadURL(urlList[packageId - 1])
   },
   executeJS(str) {
     webview.executeJavaScript(str)
   }
 }
-
+window.msgList = msgList
 ipcRenderer.on('rendererMsg', (e, msg, param) => {
   msgList[msg](param)
 })
 
 window.onload = () => {
   console.log('window-onload:', partition)
-  window.addEventListener(
-    'contextmenu',
-    (e) => {
-      e.preventDefault()
-      ipcRenderer.send('menu')
-    },
-    false
-  )
   window.addEventListener('keyup', (e) => {
     if (e.key == 'F12') {
       webview.openDevTools({ mode: 'detach' })
@@ -80,10 +73,17 @@ function initElectronFrame() {
   console.log('初始化')
   let WDVerTxt = document.getElementById('WDVerSion')
   WDVerTxt.innerHTML = document.title = '三国杀' + partition
-
+  WDVerTxt.addEventListener(
+    'contextmenu',
+    (e) => {
+      e.preventDefault()
+      ipcRenderer.send('menu')
+    },
+    false
+  )
   webview = document.getElementById('wb')
   webview.partition = 'persist:sgs' + partition
-  webview.src = loginURL
+  webview.src = urlList[packageId - 1]
   webview.addEventListener('dom-ready', execute)
 
   function execute() {
