@@ -112,6 +112,22 @@ const menutTemplate = [
             sendMsg('createWindow', 6)
           }
         }
+      },
+      {
+        text: '7',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 7)
+          }
+        }
+      },
+      {
+        text: '8',
+        events: {
+          click: () => {
+            sendMsg('createWindow', 8)
+          }
+        }
       }
     ]
   },
@@ -165,7 +181,15 @@ window.addEventListener('load', function () {
     function (e) {
       menu.toggle(e)
     },
-    true
+    false
+  )
+  let WDVerTxt = document.getElementById('WDVerSion')
+  WDVerTxt.addEventListener(
+    'click',
+    (e) => {
+      menu.toggle(e)
+    },
+    false
   )
 })
 
