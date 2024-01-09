@@ -15,10 +15,13 @@
   "license": "CC0-1.0",
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager ./ SGSOL --platform=win32 --out ./dist --electron-version 9.4.4 --overwrite --icon=./icon.ico"
+    "package": "electron-packager ./ SGSOL --platform=win32 --out=./dist --electron-version=9.4.4 --overwrite --icon=./icon.ico --ignore=.vscode"
   },
   "devDependencies": {
     "electron": "^9.4.4",
     "electron-packager": "^12.1.2"
+  },
+  "dependencies": {
+    "electron-json-config": "^2.0.0-beta"
   }
 }

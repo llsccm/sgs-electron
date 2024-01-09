@@ -5,16 +5,10 @@ const createWindow = require('./window')
 const programDir = path.dirname(app.getPath('exe')) // 程序目录
 const configPath = path.join(programDir, 'config.json') // 配置文件
 const pluginPath = path.join(programDir, '/resources/plugin.json')
-let config = {}
-global.PackageId = 1
+const config = require('electron-json-config').factory(configPath)
+global.PackageId = config.get('packageId') || 1
 
-function configInit() {
-  if (fs.existsSync(configPath)) {
-    config = JSON.parse(fs.readFileSync(configPath)) || {}
-    global.PackageId = config.packageId || 1
-  }
-}
-configInit()
+// console.log(config.get('packageId'))
 
 function changeChannel(window, packageId, isSave = false) {
   dialog
@@ -26,7 +20,7 @@ function changeChannel(window, packageId, isSave = false) {
     })
     .then((data) => {
       if (data.response == 0) {
-        if (isSave) fs.writeFileSync(configPath, JSON.stringify({ packageId }))
+        if (isSave) config.set('packageId', packageId)
         window.webContents.send('rendererMsg', 'channel', packageId)
       }
     })
@@ -69,7 +63,7 @@ module.exports = {
       const webContents = e.sender
       const window = BrowserWindow.fromWebContents(webContents)
 
-      if (webContents._partition == 1) pluginInit()
+      if (webContents._partition == 1 || webContents._partition == 2) pluginInit()
 
       const menuContextTemplate = [
         {

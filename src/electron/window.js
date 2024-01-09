@@ -64,14 +64,13 @@ function createElectronWindow(index) {
   //   //crashReporter.addExtraParameter("whlie", "main");
   // })
 
-  // mainWindow.webContents.on('resize', function () {
+  // 12的api
+  // mainWindow.on('resized', function () {
   //   console.log('win resize')
-  //   // mainWindow.webContents.send('resize', 1)
-  //   //crashReporter.addExtraParameter("whlie", "main");
   // })
 
   // 屏蔽窗口菜单（-webkit-app-region: drag）
-  mainWindow.hookWindowMessage(278, function (e) {
+  mainWindow.hookWindowMessage(278, function () {
     mainWindow.setEnabled(false)
     setTimeout(() => {
       mainWindow.setEnabled(true)
