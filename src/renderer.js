@@ -183,14 +183,14 @@ window.addEventListener('load', function () {
     },
     false
   )
-  let WDVerTxt = document.getElementById('WDVerSion')
-  WDVerTxt.addEventListener(
-    'click',
-    (e) => {
-      menu.toggle(e)
-    },
-    false
-  )
+  // let WDVerTxt = document.getElementById('WDVerSion')
+  // WDVerTxt.addEventListener(
+  //   'click',
+  //   (e) => {
+  //     menu.toggle(e)
+  //   },
+  //   false
+  // )
 })
 
 loadElectronFrame()

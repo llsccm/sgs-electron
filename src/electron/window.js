@@ -85,6 +85,7 @@ function createElectronWindow(index) {
       sansSerif: 'MI Lan Pro VF Default'
     }
     webPreferences.allowRunningInsecureContent = true
+    webPreferences.spellcheck = false
   })
 }
 
