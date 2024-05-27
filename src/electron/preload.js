@@ -101,7 +101,7 @@ function initElectronFrame() {
       })
         .then((response) => response.json())
         .catch((err) => console.log('退出登录'))
-  
+
       if (window.location.pathname === '/login/air/client/h5/index') {
         const userProto = document.querySelector('#SGS_userProto')
         userProto.parentNode.classList.add('on')
@@ -113,14 +113,14 @@ function initElectronFrame() {
         const login_form = document.querySelector('#SGS_login-form')
         let style = document.createElement('style')
         style.innerHTML =
-          'ul{padding:0;list-style:none;margin:0}a{text-decoration:none}a:link{color:#000}a:active,a:hover{outline:0}.pass-root{position:relative;color:#000}.hidden{visibility:hidden;opacity:0;height:0}.pass-root .more{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #fff}#manager{position:absolute;left:-180px;top:20px;width:192px;padding-top:5px;box-sizing:border-box;background-color:#fff;border-radius:5px;max-height:300px;overflow:auto;transition:all 1s}#manager::-webkit-scrollbar{height:12px;width:16px;background:rgba(0,0,0,.06);z-index:12;overflow:visible}#manager::-webkit-scrollbar-thumb{width:10px;background-color:#434953;border-radius:10px;z-index:12;border:4px solid transparent;background-clip:padding-box;transition:background-color .32s ease-in-out;margin:4px;min-height:32px;min-width:32px}#manager::-webkit-scrollbar-thumb:hover{background-color:#4e5157}#manager::-webkit-scrollbar-corner{background:#202020}#manager_add{display:block;margin-top:5px;padding:6px;border-top:1px solid #bfcfe4}.manager_account{display:flex;flex-direction:column;align-items:stretch;justify-content:center}.manager_account li{padding:4px 10px}.manager_account li:hover .button--danger{display:inline-block}#manager_add:hover,.manager_account li:hover{background-color:#ddd;border-radius:4px}.button--danger{display:none;float:right;box-sizing:border-box;border-radius:4px;color:#fff;background-color:#f56c6c;border:1px solid #f56c6c;cursor:pointer}li span{cursor:pointer}'
+          'ul{padding:0;list-style:none;margin:0}a{text-decoration:none}a:active,a:hover{outline:0}.pass-root{position:relative;color:#000}.hidden{visibility:hidden;opacity:0;height:0}.pass-root .more{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #fff}#manager{position:absolute;left:-246px;top:20px;width:256px;padding-top:5px;box-sizing:border-box;background-color:#fff;border-radius:5px;max-height:300px;overflow:auto;transition:all 1s}#manager::-webkit-scrollbar{height:12px;width:16px;background:rgba(0,0,0,.06);z-index:12;overflow:visible}#manager::-webkit-scrollbar-thumb{width:10px;background-color:#434953;border-radius:10px;z-index:12;border:4px solid transparent;background-clip:padding-box;transition:background-color .32s ease-in-out;margin:4px;min-height:32px;min-width:32px}#manager::-webkit-scrollbar-thumb:hover{background-color:#4e5157}#manager::-webkit-scrollbar-corner{background:#202020}#manager_add{display:block;margin-top:5px;padding:6px;border-top:1px solid #bfcfe4}.manager_account{display:flex;flex-direction:column;align-items:stretch;justify-content:center}.manager_account li{padding:4px 10px}.manager_account li:hover .button--danger{display:inline-block}#manager_add:hover,.manager_account li:hover{background-color:#ddd;border-radius:4px}.button--danger{display:none;float:right;box-sizing:border-box;border-radius:4px;color:#fff;background-color:#f56c6c;border:1px solid #f56c6c;cursor:pointer}li span{cursor:pointer}'
         document.getElementsByTagName('head')[0].appendChild(style)
         let div = document.createElement('div')
         div.innerHTML = '<div class="pass-root"><div class="more"></div><div id="manager" class="hidden"><ul class="manager_account"></ul><a id="manager_add" href="javascript:;">添加当前账号</a></div></div>'
         div.style.float = 'left'
         div.style.position = 'absolute'
-        div.style.left = '270px'
-        div.style.top = '54px'
+        div.style.left = '432px'
+        div.style.top = '64px'
         login_form.appendChild(div)
         const account = document.querySelector('#SGS_login-account')
         const password = document.querySelector('#SGS_login-password')
