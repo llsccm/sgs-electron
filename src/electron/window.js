@@ -3,19 +3,21 @@ const path = require('path')
 const group = new Map()
 global.partition = 1
 
-function createElectronWindow(index) {
+function createElectronWindow(partition) {
   // Create the browser window.
-  let partition = index
   global.partition = partition
   let x, y
   const currentWindow = BrowserWindow.getFocusedWindow()
+
   if (currentWindow) {
     const [curWndX, curWndY] = currentWindow.getPosition()
     x = curWndX + 25
     y = curWndY + 25
   }
+
   console.log('createWindow:', partition)
-  let mainWindow = new BrowserWindow({
+
+  const mainWindow = new BrowserWindow({
     width: 1220,
     height: 762,
     frame: false,
@@ -38,7 +40,8 @@ function createElectronWindow(index) {
       // allowDisplayingInsecureContent :true
     }
   })
-  mainWindow.loadFile(path.join(__dirname,'../index.html'))
+
+  mainWindow.loadFile(path.join(__dirname, '../index.html'))
   // let devtools = new BrowserWindow();
   // mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
   // mainWindow.webContents.openDevTools()
@@ -49,6 +52,7 @@ function createElectronWindow(index) {
   mainWindow.once('ready-to-show', function () {
     mainWindow.show()
   })
+
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -56,7 +60,7 @@ function createElectronWindow(index) {
     // when you should delete the corresponding element.
     console.log('closed1')
     group.delete(partition)
-    mainWindow = null
+    // mainWindow = null
   })
 
   // mainWindow.webContents.on('crashed', function () {

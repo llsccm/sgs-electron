@@ -1,15 +1,26 @@
 const { ipcRenderer, remote } = require('electron')
 const partition = remote.getGlobal('partition')
 const packageId = remote.getGlobal('PackageId')
-const urlList = ['https://web.sanguosha.com/login/air/client/h5/index', 'https://web.sanguosha.com/login/air/client/h5/index', 'https://my.4399.com/yxsgs/wd-home', 'https://my.4399.com/yxsgs/wd-home', 'http://web.kuaiwan.com/kwsgsn/index.html', 'http://web.kuaiwan.com/kwsgsn/index.html', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://web.sanguosha.com/login/air/feihuo/client/index', 'https://wan.baidu.com/microend?gameId=19793595', 'https://wan.baidu.com/microend?gameId=19793595']
+const urlList = [
+  'https://web.sanguosha.com/login/air/client/h5/index',
+  'https://web.sanguosha.com/login/air/client/h5/index',
+  'https://my.4399.com/yxsgs/wd-home',
+  'https://my.4399.com/yxsgs/wd-home',
+  'http://web.kuaiwan.com/kwsgsn/index.html',
+  'http://web.kuaiwan.com/kwsgsn/index.html',
+  'https://web.sanguosha.com/login/air/feihuo/client/index',
+  'https://web.sanguosha.com/login/air/feihuo/client/index',
+  'https://wan.baidu.com/microend?gameId=19793595',
+  'https://wan.baidu.com/microend?gameId=19793595'
+]
 let webview = null
 
 function loadElectronFrame() {
   initElectronFrame()
 }
 
-function sendMsg(msg,...arg) {
-  ipcRenderer.send(msg,...arg)
+function sendMsg(msg, ...arg) {
+  ipcRenderer.send(msg, ...arg)
 }
 
 window.loadElectronFrame = loadElectronFrame
@@ -53,9 +64,50 @@ const msgList = {
   },
   executeJS(str) {
     webview.executeJavaScript(str)
+  },
+  getCacheSize() {
+    const id = webview.getWebContentsId()
+    sendMsg('getCacheSize', id)
+  },
+  cacheSize(data) {
+    clearCache(data)
+  },
+  clearCache() {
+    const id = webview.getWebContentsId()
+    sendMsg('clearCache', id)
+  },
+  loadingxiaochao() {
+    webview
+      .executeJavaScript(
+        `fetch("https://llsccm.github.io/sgstools/daxiaochao.user.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })`
+      )
+      .then(() => {
+        console.log('记牌器加载')
+      })
+  },
+  openCache() {
+    webview.executeJavaScript(`fetch('https://llsccm.github.io/sgstools/workerloader.js')
+  .then((response) => response.text())
+  .then((scriptText) => {
+    const blob = new Blob([scriptText], { type: 'application/javascript' })
+    const blobUrl = URL.createObjectURL(blob)
+    const worker = new Laya.Browser.window['Worker'](blobUrl)
+    worker.onmessage = Laya.WorkerLoader.I.worker.onmessage
+    Laya.WorkerLoader.I.worker = worker
+    addTooltip('缓存已开启', 'acTooltip', 1500, 'green')
+  })`)
   }
 }
+
 window.msgList = msgList
+
 ipcRenderer.on('rendererMsg', (e, msg, param) => {
   msgList[msg](param)
 })
@@ -73,6 +125,7 @@ function initElectronFrame() {
   console.log('初始化')
   let WDVerTxt = document.getElementById('WDVerSion')
   WDVerTxt.innerHTML = document.title = '三国杀' + partition
+
   WDVerTxt.addEventListener(
     'contextmenu',
     (e) => {
@@ -81,13 +134,16 @@ function initElectronFrame() {
     },
     false
   )
+
   webview = document.getElementById('wb')
   webview.partition = 'persist:sgs' + partition
   webview.src = urlList[packageId - 1]
   webview.addEventListener('dom-ready', execute)
 
   function execute() {
-    console.log('dom-ready')
+    const id = webview.getWebContentsId()
+    console.log('WebContents ID:', id)
+
     webview.executeJavaScript(`
       window.WDVerSion = '1.0.0'
       console.info('--wd-- ', window.location)
@@ -195,6 +251,14 @@ function initElectronFrame() {
         let userlist = getData()
         load()
       }
+      fetch("https://llsccm.github.io/sgstools/base.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })
     `)
   }
 }

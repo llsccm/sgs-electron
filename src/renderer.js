@@ -60,7 +60,6 @@ function buttonInit() {
 
 buttonInit()
 
-let menu
 const menutTemplate = [
   {
     text: '新建窗口',
@@ -161,10 +160,27 @@ const menutTemplate = [
     ]
   },
   {
-    text: '加载记牌器',
+    text: '加载小抄',
     events: {
       click: () => {
-        msgList.loadingDeck()
+        msgList.loadingxiaochao()
+      }
+    }
+  },
+  {
+    text: '开启缓存',
+    events: {
+      click: () => {
+        msgList.openCache()
+      }
+    }
+  },
+
+  {
+    text: '清除缓存',
+    events: {
+      click: () => {
+        msgList.getCacheSize()
       }
     }
   },
@@ -175,7 +191,7 @@ const menutTemplate = [
 ]
 
 window.addEventListener('load', function () {
-  menu = new cMenu(menutTemplate)
+  const menu = new cMenu(menutTemplate)
   document.getElementById('cmenu').addEventListener(
     'click',
     function (e) {
@@ -183,14 +199,6 @@ window.addEventListener('load', function () {
     },
     false
   )
-  // let WDVerTxt = document.getElementById('WDVerSion')
-  // WDVerTxt.addEventListener(
-  //   'click',
-  //   (e) => {
-  //     menu.toggle(e)
-  //   },
-  //   false
-  // )
 })
 
 loadElectronFrame()
@@ -202,6 +210,19 @@ function channel(packageId) {
     maskClose: true,
     ok: () => {
       msgList['channel'](packageId)
+    },
+    no: () => {}
+  })
+}
+
+function clearCache(data) {
+  const size = (data / 1024 / 1024).toFixed(2)
+  cxDialog({
+    title: '提示',
+    info: `缓存大小为${size}MB,是否清除缓存`,
+    maskClose: true,
+    ok: () => {
+      msgList['clearCache']()
     },
     no: () => {}
   })

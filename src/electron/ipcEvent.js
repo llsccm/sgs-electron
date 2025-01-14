@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, Menu, webContents } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const createWindow = require('./window')
@@ -33,11 +33,13 @@ module.exports = {
       const win = BrowserWindow.fromWebContents(e.sender)
       win.close()
     })
+
     //接收最小化命令
     ipcMain.on('window-min', function (e) {
       const win = BrowserWindow.fromWebContents(e.sender)
       win.minimize()
     })
+
     //接收最大化命令
     ipcMain.on('window-max', function (e) {
       const win = BrowserWindow.fromWebContents(e.sender)
@@ -47,23 +49,37 @@ module.exports = {
         win.maximize()
       }
     })
+
     //
     ipcMain.on('setBounds', function (e) {
       const win = BrowserWindow.fromWebContents(e.sender)
       win.setBounds({ width: 1100, height: 700 })
     })
+
     ipcMain.on('createWindow', (e, index) => {
       createWindow(index)
+    })
+
+    ipcMain.on('getCacheSize', (e, id) => {
+      const contents = webContents.fromId(id)
+      contents.session.getCacheSize().then((size) => {
+        e.sender.send('rendererMsg', 'cacheSize', size)
+      })
+    })
+
+    ipcMain.on('clearCache', (e, id) => {
+      const contents = webContents.fromId(id)
+      contents.session.clearCache()
     })
   },
   menuEventInit() {
     ipcMain.on('menu', function (e) {
       const plugins = []
       const submenuArr = []
-      const webContents = e.sender
-      const window = BrowserWindow.fromWebContents(webContents)
+      const contents = e.sender
+      const window = BrowserWindow.fromWebContents(contents)
 
-      if (webContents._partition == 1 || webContents._partition == 2) pluginInit()
+      if (contents._partition == 1 || contents._partition == 2) pluginInit()
 
       const menuContextTemplate = [
         {
@@ -160,12 +176,19 @@ module.exports = {
           }
         },
         {
+          label: '加载小抄',
+          click: () => {
+            window.webContents.send('rendererMsg', 'loadingxiaochao')
+          }
+        },
+        {
           label: '更多插件',
           submenu: [
             {
               label: '修改尺寸',
               click: () => {
-                webContents.send('rendererMsg', 'changeSize')
+                contents.send('rendererMsg', 'changeSize')
+                // contents.openDevTools()
               }
             },
             ...submenuArr
@@ -179,11 +202,12 @@ module.exports = {
         if (fs.existsSync(pluginPath)) {
           const obj = JSON.parse(fs.readFileSync(pluginPath))
           plugins.push(...obj.plugins)
+
           plugins.forEach((item) => {
             submenuArr.push({
               label: item.name,
               click: () => {
-                webContents.send('rendererMsg', 'executeJS', item.scripts)
+                contents.send('rendererMsg', 'executeJS', item.scripts)
               }
             })
           })
