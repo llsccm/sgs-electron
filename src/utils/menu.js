@@ -5,7 +5,8 @@ class cMenu {
     if (!(menutTemplate instanceof Array)) {
       throw new Error('Parameter 1 must be of type Array')
     }
-    this.init(menutTemplate)
+    this.menuData = menutTemplate // Store the menu data
+    this.init(this.menuData)
   }
 
   init(menutTemplate) {
@@ -35,10 +36,20 @@ class cMenu {
 
       if (item.type == 'cm-divider') li.classList.add('cm-divider')
       if (typeof item.sub !== 'undefined') li.classList.add('cm-sub-item')
+      if (item.selected) li.classList.add('cm-selected')
 
       let text_span = document.createElement('span')
       text_span.innerText = item.text
       li.appendChild(text_span)
+
+      // Add a default click event listener for selectable items
+      if (item.selectable) {
+        li.addEventListener('click', (e) => {
+          // e.stopPropagation()
+          item.selected = true
+          this.init(this.menuData)
+        })
+      }
 
       if (typeof item.events === 'object') {
         const keys = Object.keys(item.events)
@@ -64,12 +75,14 @@ class cMenu {
   }
 
   hide(e) {
-    if (e) {
-      if (e.target.nodeName == 'SPAN') {
-        if (e.target.parentNode.className.includes('cm-sub-item')) return
-      }
-      if (e.target.className.includes('cm-sub-item')) return
+    if (e?.target?.nodeName === 'SPAN' && e.target.parentNode.className.includes('cm-sub-item')) {
+      return
     }
+
+    if (e?.target?.className?.includes('cm-sub-item')) {
+      return
+    }
+
     this.container.classList.remove('display')
   }
 }

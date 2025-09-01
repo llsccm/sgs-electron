@@ -30,6 +30,7 @@ ipcRenderer.on('resize', (e, msg) => {
   console.log('接收', msg)
 })
 
+// https://llsccm.github.io/sgstools/
 const msgList = {
   loadingDeck() {
     webview

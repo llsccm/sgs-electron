@@ -170,12 +170,6 @@ module.exports = {
           ]
         },
         {
-          label: '加载记牌器',
-          click: () => {
-            window.webContents.send('rendererMsg', 'loadingDeck')
-          }
-        },
-        {
           label: '加载小抄',
           click: () => {
             window.webContents.send('rendererMsg', 'loadingxiaochao')

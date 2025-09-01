@@ -31,8 +31,7 @@
 }
 
 .cm-container .nav-item {
-  padding: 5px 10px;
-  padding-right: 15px;
+  padding: 5px 15px 5px 10px;
   color: #ccc;
   white-space: nowrap;
   cursor: pointer;
@@ -87,4 +86,11 @@
   margin-top: -8px;
   border-color: transparent transparent transparent #cbcbcb;
   border-width: 8px 0 8px 8px;
+}
+
+.cm-container .nav-item.cm-selected::after {
+  content: '✓';
+  position: absolute;
+  right: 2px;
+  color: #0f0;
 }

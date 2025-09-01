@@ -161,6 +161,7 @@ const menutTemplate = [
   },
   {
     text: '加载小抄',
+    selectable: true,
     events: {
       click: () => {
         msgList.loadingxiaochao()
@@ -169,13 +170,13 @@ const menutTemplate = [
   },
   {
     text: '开启缓存',
+    selectable: true,
     events: {
       click: () => {
         msgList.openCache()
       }
     }
   },
-
   {
     text: '清除缓存',
     events: {
