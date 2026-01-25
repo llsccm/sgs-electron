@@ -1,11 +1,9 @@
 // Modules to control application life and create native browser window
 const { app, shell, BrowserWindow } = require('electron')
-//const { crashReporter } = require('electron')
 const ipcEvent = require('./electron/ipcEvent')
 const createWindow = require('./electron/window')
 const interceptor = require('./electron/interceptor')
-//app.commandLine.appendSwitch("--disable-http-cache");
-// app.commandLine.appendSwitch('--no-sandbox')
+
 app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // 中文环境下不能替换字体

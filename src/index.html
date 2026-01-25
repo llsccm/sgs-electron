@@ -51,6 +51,14 @@
       outline: none;
       -webkit-user-drag: none;
     }
+
+    #wb {
+      position: absolute;
+      top: 30px;
+      left: 0px;
+      bottom: 0px;
+      width: 100%;
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="./utils/cxdialog.min.css">
   <link rel="stylesheet" type="text/css" href="./utils/menu.css">
@@ -60,12 +68,12 @@
   <div id="bgDiv" style="top: 0px; left: 0px; width: 100%; height: 100%; z-index: -3">
     <img style="width: 100%; height: 100%" src="./res/bg1.png" />
   </div>
-  <webview id="wb" style="position: absolute; top: 30px; left: 0px; bottom: 0px; width: 100%" allowpopups></webview>
+  <webview id="wb" allowpopups></webview>
   <div id="topDiv" style="top: 0px; left: 0px; width: 100%; height: 30px;">
     <img style="width: 100%; height: 30px; -webkit-app-region: drag;" src="./res/bg2.png" />
     <img style="width: 743px; height: 13px; left: 328px" src="./res/bg3.png" />
-    <img class="icon" id="cmenu" style="width: 25px; height: 25px; left: 4px; top: 4px" src="./res/icon.png" 
-    onmousemove="this.src= './res/smallicon.png'" onmouseout="this.src='./res/icon.png'" />
+    <img class="icon" id="cmenu" style="width: 25px; height: 25px; left: 4px; top: 4px" src="./res/icon.png"
+      onmousemove="this.src= './res/smallicon.png'" onmouseout="this.src='./res/icon.png'" />
     <span id="WDVerSion" style="left: 30px; top: 0px;">三国杀</span>
     <!-- <button id='button123' style="position: absolute;left:80px;top:5px;">111</button> -->
     <div id="eRightTopDiv" style="top: 0px; right: 0px; width: 85px; height: 20px; z-index: 100003;">
@@ -80,6 +88,7 @@
 </body>
 <script type="text/javascript" src="./utils/cxdialog.min.js"></script>
 <script type="text/javascript" src="./utils/menu.js"></script>
+<script type="text/javascript" src="./index.js"></script>
 <script type="text/javascript" src="./renderer.js"></script>
 
 </html>

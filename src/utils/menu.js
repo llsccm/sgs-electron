@@ -1,12 +1,17 @@
 class cMenu {
   static num = 0
+
   constructor(menutTemplate) {
     cMenu.num++
+
     if (!(menutTemplate instanceof Array)) {
       throw new Error('Parameter 1 must be of type Array')
     }
+
     this.menuData = menutTemplate // Store the menu data
+    this.documentClick = this.hide.bind(this)
     this.init(this.menuData)
+    window.addEventListener('click', this.documentClick)
   }
 
   init(menutTemplate) {
@@ -16,12 +21,11 @@ class cMenu {
       cnt.id = 'cm-' + cMenu.num
       document.body.appendChild(cnt)
     }
+
     const container = document.getElementById('cm-' + cMenu.num)
     container.innerHTML = ''
     container.appendChild(this.renderLevel(menutTemplate))
-    this.documentClick = this.hide.bind(this)
-    // container.addEventListener('click', this.documentClick)
-    window.addEventListener('click', this.documentClick)
+
     container.style.top = '30px'
     container.style.left = '2px'
     this.container = container
@@ -36,7 +40,7 @@ class cMenu {
 
       if (item.type == 'cm-divider') li.classList.add('cm-divider')
       if (typeof item.sub !== 'undefined') li.classList.add('cm-sub-item')
-      if (item.selected) li.classList.add('cm-selected')
+      // if (item.selected) li.classList.add('cm-selected')
 
       let text_span = document.createElement('span')
       text_span.innerText = item.text
@@ -45,9 +49,7 @@ class cMenu {
       // Add a default click event listener for selectable items
       if (item.selectable) {
         li.addEventListener('click', (e) => {
-          // e.stopPropagation()
-          item.selected = true
-          this.init(this.menuData)
+          li.classList.add('cm-selected')
         })
       }
 
@@ -84,5 +86,9 @@ class cMenu {
     }
 
     this.container.classList.remove('display')
+  }
+
+  destroy() {
+    window.removeEventListener('click', this.documentClick)
   }
 }

@@ -30,8 +30,7 @@ function createElectronWindow(partition) {
       webviewTag: true,
       // nodeIntegration: true,
       // webSecurity: false,
-      contextIsolation: false, //12之后需要设置
-      enableRemoteModule: true,
+      contextIsolation: true, //12之后需要设置
       nativeWindowOpen: true, //是否使用原生的window.open()
       plugins: true, //是否支持插件
       sandbox: true, //沙盒选项,这个很重要
@@ -69,9 +68,9 @@ function createElectronWindow(partition) {
   // })
 
   // 12的api
-  // mainWindow.on('resized', function () {
-  //   console.log('win resize')
-  // })
+  mainWindow.on('resized', function () {
+    console.log('win resize')
+  })
 
   // 屏蔽窗口菜单（-webkit-app-region: drag）
   mainWindow.hookWindowMessage(278, function () {

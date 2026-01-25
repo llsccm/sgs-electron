@@ -71,6 +71,13 @@ module.exports = {
       const contents = webContents.fromId(id)
       contents.session.clearCache()
     })
+
+    ipcMain.handle('get-window-data', (e) => {
+      return {
+        partition: e.sender._partition,
+        packageId: global.PackageId
+      }
+    })
   },
   menuEventInit() {
     ipcMain.on('menu', function (e) {

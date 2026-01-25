@@ -1,44 +1,110 @@
-function buttonInit() {
-  var max = document.getElementById('max')
-  if (max) {
-    max.addEventListener('click', () => {
-      //发送最大化命令
-      sendMsg('window-max')
-      //最大化图形切换
-      if (max.getAttribute('name') == 'max') {
-        max.setAttribute('name', 'min')
-      } else {
-        max.setAttribute('name', 'max')
-      }
-      if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', './res/button_05.png')
-      } else {
-        max.setAttribute('src', './res/button_01.png')
-      }
-    })
+const urlList = [
+  'https://web.sanguosha.com/login/air/client/h5/index',
+  'https://web.sanguosha.com/login/air/client/h5/index',
+  'https://my.4399.com/yxsgs/wd-home',
+  'https://my.4399.com/yxsgs/wd-home',
+  'http://web.kuaiwan.com/kwsgsn/index.html',
+  'http://web.kuaiwan.com/kwsgsn/index.html',
+  'https://web.sanguosha.com/login/air/feihuo/client/index',
+  'https://web.sanguosha.com/login/air/feihuo/client/index',
+  'https://wan.baidu.com/microend?gameId=19793595',
+  'https://wan.baidu.com/microend?gameId=19793595'
+]
 
-    max.addEventListener('mousemove', () => {
-      //最大化图形切换
-      if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', './res/button_06.png')
-      } else {
-        max.setAttribute('src', './res/button_02.png')
-      }
-    })
-    max.addEventListener('mouseout', () => {
-      if (max.getAttribute('name') == 'max') {
-        max.setAttribute('src', './res/button_05.png')
-      } else {
-        max.setAttribute('src', './res/button_01.png')
-      }
-    })
+const webview = document.getElementById('wb')
+
+const msgList = {
+  loadingDeck() {
+    if (!webview) return
+    webview
+      .executeJavaScript(
+        `fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })`
+      )
+      .then(() => {
+        console.log('记牌器加载')
+      })
+  },
+  changeSize() {
+    if (!webview) return
+    webview
+      .executeJavaScript(
+        `if(window.SystemContext){
+        window.SystemContext.GAME_MIN_WIDTH = 1100
+        window.SystemContext.GAME_MIN_HEIGHT = 670
+      }`
+      )
+      .then(() => {
+        window.electronAPI.sendMsg('setBounds')
+      })
+  },
+  channel(pid) {
+    if (!webview) return
+    webview.loadURL(urlList[pid - 1])
+  },
+  executeJS(str) {
+    if (!webview) return
+    webview.executeJavaScript(str)
+  },
+  // 查询缓存大小
+  getCacheSize() {
+    if (!webview) return
+    const id = webview.getWebContentsId()
+    window.electronAPI.sendMsg('getCacheSize', id)
+  },
+  // 消息回调
+  cacheSize(data) {
+    clearCache(data)
+  },
+  // 清理缓存
+  clearCache() {
+    if (!webview) return
+    const id = webview.getWebContentsId()
+    window.electronAPI.sendMsg('clearCache', id)
+  },
+  loadingxiaochao() {
+    if (!webview) return
+    webview
+      .executeJavaScript(
+        `fetch("https://www.desuwa.link/sgs/daxiaochao.user.js").then(resp => resp.text())
+      .then(data => {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        let src = document.createTextNode(data)
+        script.appendChild(src)
+        document.body.appendChild(script)
+      })`
+      )
+      .then(() => {
+        console.log('记牌器加载')
+      })
+  },
+  openCache() {
+    if (!webview) return
+    webview.executeJavaScript(`fetch('https://www.desuwa.link/sgs/workerloader.js')
+  .then((response) => response.text())
+  .then((scriptText) => {
+    const blob = new Blob([scriptText], { type: 'application/javascript' })
+    const blobUrl = URL.createObjectURL(blob)
+    const worker = new Laya.Browser.window['Worker'](blobUrl)
+    worker.onmessage = Laya.WorkerLoader.I.worker.onmessage
+    Laya.WorkerLoader.I.worker = worker
+    addTooltip('缓存已开启', 'acTooltip', 1500, 'green')
+  })`)
   }
+}
 
+function buttonInit() {
   var min = document.getElementById('min')
   if (min) {
     min.addEventListener('click', () => {
-      //发送最小化命令
-      sendMsg('window-min')
+      window.electronAPI.sendMsg('window-min')
     })
   }
 
@@ -50,7 +116,8 @@ function buttonInit() {
         info: '是否确定退出游戏',
         maskClose: true,
         ok: () => {
-          sendMsg('window-close')
+          cleanup()
+          window.electronAPI.sendMsg('window-close')
         },
         no: () => {}
       })
@@ -68,7 +135,7 @@ const menutTemplate = [
         text: '1',
         events: {
           click: () => {
-            sendMsg('createWindow', 1)
+            window.electronAPI.sendMsg('createWindow', 1)
           }
         }
       },
@@ -76,7 +143,7 @@ const menutTemplate = [
         text: '2',
         events: {
           click: () => {
-            sendMsg('createWindow', 2)
+            window.electronAPI.sendMsg('createWindow', 2)
           }
         }
       },
@@ -84,7 +151,7 @@ const menutTemplate = [
         text: '3',
         events: {
           click: () => {
-            sendMsg('createWindow', 3)
+            window.electronAPI.sendMsg('createWindow', 3)
           }
         }
       },
@@ -92,7 +159,7 @@ const menutTemplate = [
         text: '4',
         events: {
           click: () => {
-            sendMsg('createWindow', 4)
+            window.electronAPI.sendMsg('createWindow', 4)
           }
         }
       },
@@ -100,7 +167,7 @@ const menutTemplate = [
         text: '5',
         events: {
           click: () => {
-            sendMsg('createWindow', 5)
+            window.electronAPI.sendMsg('createWindow', 5)
           }
         }
       },
@@ -108,7 +175,7 @@ const menutTemplate = [
         text: '6',
         events: {
           click: () => {
-            sendMsg('createWindow', 6)
+            window.electronAPI.sendMsg('createWindow', 6)
           }
         }
       },
@@ -116,7 +183,7 @@ const menutTemplate = [
         text: '7',
         events: {
           click: () => {
-            sendMsg('createWindow', 7)
+            window.electronAPI.sendMsg('createWindow', 7)
           }
         }
       },
@@ -124,7 +191,7 @@ const menutTemplate = [
         text: '8',
         events: {
           click: () => {
-            sendMsg('createWindow', 8)
+            window.electronAPI.sendMsg('createWindow', 8)
           }
         }
       }
@@ -191,8 +258,15 @@ const menutTemplate = [
   }
 ]
 
-window.addEventListener('load', function () {
-  const menu = new cMenu(menutTemplate)
+const menu = new cMenu(menutTemplate)
+
+window.onload = () => {
+  window.addEventListener('keyup', (e) => {
+    if (e.key == 'F12') {
+      if (webview) webview.openDevTools({ mode: 'detach' })
+    }
+  })
+
   document.getElementById('cmenu').addEventListener(
     'click',
     function (e) {
@@ -200,9 +274,7 @@ window.addEventListener('load', function () {
     },
     false
   )
-})
-
-loadElectronFrame()
+}
 
 function channel(packageId) {
   cxDialog({
@@ -211,6 +283,7 @@ function channel(packageId) {
     maskClose: true,
     ok: () => {
       msgList['channel'](packageId)
+      menu.init(menutTemplate)
     },
     no: () => {}
   })
@@ -227,4 +300,138 @@ function clearCache(data) {
     },
     no: () => {}
   })
+}
+
+const cleanup = window.electronAPI.onMessage((msg, param) => {
+  if (msgList[msg]) {
+    msgList[msg](param)
+  }
+})
+
+window.electronAPI.loadElectronFrame().then((data) => {
+  // console.log(webview.loadURL)
+  webview.partition = 'persist:sgs' + data.partition
+  webview.src = urlList[data.packageId - 1]
+})
+
+webview.addEventListener('dom-ready', execute)
+
+function execute() {
+  const id = webview.getWebContentsId()
+  console.log('WebContents ID:', id)
+  webview.executeJavaScript(`
+    window.WDVerSion = '1.0.0'
+    console.info('--wd-- ', window.location)
+    fetch('https://cas.dobest.cn/cas/logout?url=https%3A%2F%2Fweb.sanguosha.com%2Findex.html', {
+      referrer: 'https://web.sanguosha.com/',
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      body: null,
+      method: 'GET',
+      mode: 'no-cors',
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .catch((err) => console.log('退出登录'))
+    if (window.location.pathname === '/login/air/client/h5/index') {
+      const userProto = document.querySelector('#SGS_userProto')
+      userProto.parentNode.classList.add('on')
+      userProto.checked = !0
+      const loginbtn = document.querySelector('#SGS_login-btn')
+      loginbtn.removeAttribute('disabled')
+      loginbtn.classList.remove('SGS_loginbtn-disable')
+      console.log('加载密码管理')
+      const login_form = document.querySelector('#SGS_login-form')
+      let style = document.createElement('style')
+      style.innerHTML =
+        'ul{padding:0;list-style:none;margin:0}a{text-decoration:none}a:active,a:hover{outline:0}.pass-root{position:relative;color:#000}.hidden{visibility:hidden;opacity:0;height:0}.pass-root .more{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:10px solid #fff}#manager{position:absolute;left:-246px;top:20px;width:256px;padding-top:5px;box-sizing:border-box;background-color:#fff;border-radius:5px;max-height:300px;overflow:auto;transition:all 1s}#manager::-webkit-scrollbar{height:12px;width:16px;background:rgba(0,0,0,.06);z-index:12;overflow:visible}#manager::-webkit-scrollbar-thumb{width:10px;background-color:#434953;border-radius:10px;z-index:12;border:4px solid transparent;background-clip:padding-box;transition:background-color .32s ease-in-out;margin:4px;min-height:32px;min-width:32px}#manager::-webkit-scrollbar-thumb:hover{background-color:#4e5157}#manager::-webkit-scrollbar-corner{background:#202020}#manager_add{display:block;margin-top:5px;padding:6px;border-top:1px solid #bfcfe4}.manager_account{display:flex;flex-direction:column;align-items:stretch;justify-content:center}.manager_account li{padding:4px 10px}.manager_account li:hover .button--danger{display:inline-block}#manager_add:hover,.manager_account li:hover{background-color:#ddd;border-radius:4px}.button--danger{display:none;float:right;box-sizing:border-box;border-radius:4px;color:#fff;background-color:#f56c6c;border:1px solid #f56c6c;cursor:pointer}li span{cursor:pointer}'
+      document.getElementsByTagName('head')[0].appendChild(style)
+      let div = document.createElement('div')
+      div.innerHTML = '<div class="pass-root"><div class="more"></div><div id="manager" class="hidden"><ul class="manager_account"></ul><a id="manager_add" href="javascript:;">添加当前账号</a></div></div>'
+      div.style.float = 'left'
+      div.style.position = 'absolute'
+      div.style.left = '432px'
+      div.style.top = '64px'
+      login_form.appendChild(div)
+      const account = document.querySelector('#SGS_login-account')
+      const password = document.querySelector('#SGS_login-password')
+      const manager = document.querySelector('#manager')
+      const ul = document.querySelector('.manager_account')
+      account.spellcheck = false
+      function getData() {
+        let data = window.localStorage.getItem('managerData')
+        if (data != null) {
+          return JSON.parse(data)
+        } else {
+          return []
+        }
+      }
+      function saveData(list) {
+        window.localStorage.setItem('managerData', JSON.stringify(list))
+      }
+      function load() {
+        ul.innerHTML = ''
+        if (userlist) {
+          userlist.forEach((item, index) => {
+            let li = document.createElement('li')
+            li.dataset.index = index
+            li.innerHTML = '<span data-index="' + index + '">' + item.account + '</span><button class="button--danger" data-index="' + index + '">X</button>'
+            li.addEventListener('click', clickCb)
+            ul.appendChild(li)
+          })
+        }
+      }
+      function remove(index) {
+        userlist.splice(index, 1)
+        saveData(userlist)
+        load()
+      }
+      function clickCb(e) {
+        const target = e.target
+        switch (target.nodeName) {
+          case 'LI':
+          case 'SPAN':
+            auto(target)
+            break
+          case 'BUTTON':
+            remove(target.dataset.index)
+            break
+          default:
+            break
+        }
+        function auto(target) {
+          account.value = userlist[target.dataset.index].account
+          password.value = userlist[target.dataset.index].password
+          manager.classList.toggle('hidden')
+          userProto.checked = !0
+          userProto.parentNode.classList.add('on')
+          loginbtn.removeAttribute('disabled')
+          loginbtn.classList.remove('SGS_loginbtn-disable')
+        }
+      }
+      document.querySelector('#manager_add').addEventListener('click', () => {
+        let account = document.querySelector('#SGS_login-account').value
+        let password = document.querySelector('#SGS_login-password').value
+        if (!account) return
+        userlist.push({ account, password })
+        saveData(userlist)
+        load()
+        setTimeout(() => {
+          manager.classList.toggle('hidden')
+        }, 1000)
+      })
+      document.querySelector('.more').addEventListener('click', () => {
+        manager.classList.toggle('hidden')
+      })
+      let userlist = getData()
+      load()
+    }
+    fetch("https://www.desuwa.link/sgs/base.js").then(resp => resp.text())
+    .then(data => {
+      let script = document.createElement('script')
+      script.type = 'text/javascript'
+      let src = document.createTextNode(data)
+      script.appendChild(src)
+      document.body.appendChild(script)
+    })
+  `)
 }
