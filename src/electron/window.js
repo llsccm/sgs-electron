@@ -1,11 +1,10 @@
 const { BrowserWindow } = require('electron')
 const path = require('path')
+const config = require('./config')
 const group = new Map()
-global.partition = 1
 
+// Create the browser window.
 function createElectronWindow(partition) {
-  // Create the browser window.
-  global.partition = partition
   let x, y
   const currentWindow = BrowserWindow.getFocusedWindow()
 
@@ -17,9 +16,13 @@ function createElectronWindow(partition) {
 
   console.log('createWindow:', partition)
 
+  // 读取保存的窗口尺寸，如果没有则使用默认值
+  const savedWidth = config.get('windowWidth') || 1220
+  const savedHeight = config.get('windowHeight') || 762
+
   const mainWindow = new BrowserWindow({
-    width: 1220,
-    height: 762,
+    width: savedWidth,
+    height: savedHeight,
     frame: false,
     resizable: true,
     titleBarStyle: 'customButtonOnHover',
@@ -34,13 +37,13 @@ function createElectronWindow(partition) {
       nativeWindowOpen: true, //是否使用原生的window.open()
       plugins: true, //是否支持插件
       sandbox: true, //沙盒选项,这个很重要
-      preload: path.join(__dirname, './preload.js')
+      preload: path.join(__dirname, '../preload/index.js')
       // allowRunningInsecureContent: true,
       // allowDisplayingInsecureContent :true
     }
   })
 
-  mainWindow.loadFile(path.join(__dirname, '../index.html'))
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   // let devtools = new BrowserWindow();
   // mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
   // mainWindow.webContents.openDevTools()
@@ -69,7 +72,9 @@ function createElectronWindow(partition) {
 
   // 12的api
   mainWindow.on('resized', function () {
-    console.log('win resize')
+    const [width, height] = mainWindow.getSize()
+    config.set('windowWidth', width)
+    config.set('windowHeight', height)
   })
 
   // 屏蔽窗口菜单（-webkit-app-region: drag）

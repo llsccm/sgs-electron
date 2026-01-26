@@ -2,13 +2,12 @@ const { app, BrowserWindow, ipcMain, dialog, Menu, webContents } = require('elec
 const path = require('path')
 const fs = require('fs')
 const createWindow = require('./window')
-const programDir = path.dirname(app.getPath('exe')) // 程序目录
-const configPath = path.join(programDir, 'config.json') // 配置文件
+const config = require('./config')
+// 程序目录
+const programDir = path.dirname(app.getPath('exe'))
+// 插件配置文件
 const pluginPath = path.join(programDir, '/resources/plugin.json')
-const config = require('electron-json-config').factory(configPath)
-global.PackageId = config.get('packageId') || 1
-
-// console.log(config.get('packageId'))
+let PackageId = config.get('packageId') || 1
 
 function changeChannel(window, packageId, isSave = false) {
   dialog
@@ -20,7 +19,10 @@ function changeChannel(window, packageId, isSave = false) {
     })
     .then((data) => {
       if (data.response == 0) {
-        if (isSave) config.set('packageId', packageId)
+        if (isSave) {
+          config.set('packageId', packageId)
+          PackageId = packageId
+        }
         window.webContents.send('rendererMsg', 'channel', packageId)
       }
     })
@@ -75,7 +77,7 @@ module.exports = {
     ipcMain.handle('get-window-data', (e) => {
       return {
         partition: e.sender._partition,
-        packageId: global.PackageId
+        packageId: PackageId
       }
     })
   },
@@ -86,49 +88,15 @@ module.exports = {
       const contents = e.sender
       const window = BrowserWindow.fromWebContents(contents)
 
-      if (contents._partition == 1 || contents._partition == 2) pluginInit()
+      if (contents._partition <= 2) pluginInit()
 
       const menuContextTemplate = [
         {
           label: '多开',
-          submenu: [
-            {
-              label: '2',
-              click: () => {
-                createWindow(2)
-              }
-            },
-            {
-              label: '3',
-              click: () => {
-                createWindow(3)
-              }
-            },
-            {
-              label: '4',
-              click: () => {
-                createWindow(4)
-              }
-            },
-            {
-              label: '5',
-              click: () => {
-                createWindow(5)
-              }
-            },
-            {
-              label: '6',
-              click: () => {
-                createWindow(6)
-              }
-            },
-            {
-              label: '1',
-              click: () => {
-                createWindow(1)
-              }
-            }
-          ]
+          submenu: Array.from({ length: 6 }, (_, i) => ({
+            label: String(i + 1),
+            click: () => createWindow(i + 1)
+          }))
         },
         {
           label: '跳转页面',

@@ -38,13 +38,11 @@ app.on('activate', function () {
 })
 
 app.on('web-contents-created', (e, webContents) => {
-  webContents.on('new-window', (event, url) => {
-    event.preventDefault()
+  webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http')) {
-      shell.openExternal(url).catch((e) => {
-        console.log(e)
-      })
+      shell.openExternal(url)
     }
+    return { action: 'deny' }
   })
 })
 
