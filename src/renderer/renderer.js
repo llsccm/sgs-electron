@@ -100,32 +100,28 @@ const msgList = {
   }
 }
 
-function buttonInit() {
-  var min = document.getElementById('min')
-  if (min) {
-    min.addEventListener('click', () => {
-      window.electronAPI.sendMsg('window-min')
-    })
-  }
-
-  var close = document.getElementById('close')
-  if (close) {
-    close.addEventListener('click', () => {
-      cxDialog({
-        title: '提示',
-        info: '是否确定退出游戏',
-        maskClose: true,
-        ok: () => {
-          cleanup()
-          window.electronAPI.sendMsg('window-close')
-        },
-        no: () => {}
-      })
-    })
-  }
+var min = document.getElementById('min')
+if (min) {
+  min.addEventListener('click', () => {
+    window.electronAPI.sendMsg('window-min')
+  })
 }
 
-buttonInit()
+var close = document.getElementById('close')
+if (close) {
+  close.addEventListener('click', () => {
+    cxDialog({
+      title: '提示',
+      info: '是否确定退出游戏',
+      maskClose: true,
+      ok: () => {
+        cleanup()
+        window.electronAPI.sendMsg('window-close')
+      },
+      no: () => {}
+    })
+  })
+}
 
 const menutTemplate = [
   {
@@ -270,9 +266,7 @@ window.electronAPI.loadElectronFrame().then((data) => {
   webview.src = urlList[packageId - 1]
 })
 
-webview.addEventListener('dom-ready', execute)
-
-function execute() {
+webview.addEventListener('dom-ready', () => {
   const id = webview.getWebContentsId()
   console.log('WebContents ID:', id)
-}
+})

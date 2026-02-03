@@ -154,10 +154,11 @@ module.exports = {
           label: '更多插件',
           submenu: [
             {
-              label: '修改尺寸',
+              label: '默认尺寸',
               click: () => {
-                contents.send('rendererMsg', 'changeSize')
-                // contents.openDevTools()
+                config.set('windowWidth', 1220)
+                config.set('windowHeight', 762)
+                window.setSize(1220, 762)
               }
             },
             ...submenuArr
