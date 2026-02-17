@@ -2,7 +2,7 @@ var max = document.getElementById('max')
 if (max) {
   max.addEventListener('click', () => {
     //发送最大化命令
-    window.sgs.sendMsg('window-max')
+    window.electronAPI.sendMsg('window-max')
     //最大化图形切换
     if (max.getAttribute('name') == 'max') {
       max.setAttribute('name', 'min')

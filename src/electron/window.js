@@ -31,6 +31,7 @@ function createElectronWindow(partition) {
     y,
     webPreferences: {
       webviewTag: true,
+      backgroundThrottling: false,
       // nodeIntegration: true,
       // webSecurity: false,
       contextIsolation: true, //12之后需要设置
