@@ -1,0 +1,42 @@
+# 忽略 node_modules 和构建产物
+node_modules/
+dist/
+build/
+out/
+coverage/
+
+# 忽略环境配置
+.env
+.env.*
+.vscode/
+
+# 忽略锁文件
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 忽略测试快照和报告
+*.snap
+*.log
+*.map
+
+# 忽略图片和静态资源
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.webp
+
+__mocks__/
+mock-data/
+fixtures/
+
+# 忽略 IDE 文件
+.idea/
+.DS_Store
+
+# 忽略 Roo-Code 自己的缓存（如果有）
+.roo/
+.roo-cache/

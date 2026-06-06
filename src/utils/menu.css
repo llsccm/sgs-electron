@@ -5,6 +5,7 @@
   transform-origin: top left;
   opacity: 0;
   transition: transform 0.1s;
+  user-select: none;
 }
 
 .cm-container.display {

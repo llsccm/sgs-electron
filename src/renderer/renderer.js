@@ -14,23 +14,6 @@ const urlList = [
 const webview = document.getElementById('wb')
 
 const msgList = {
-  loadingDeck() {
-    if (!webview) return
-    webview
-      .executeJavaScript(
-        `fetch("https://llsccm.github.io/sgstools/inject.js").then(resp => resp.text())
-      .then(data => {
-        let script = document.createElement('script')
-        script.type = 'text/javascript'
-        let src = document.createTextNode(data)
-        script.appendChild(src)
-        document.body.appendChild(script)
-      })`
-      )
-      .then(() => {
-        console.log('记牌器加载')
-      })
-  },
   changeSize() {
     if (!webview) return
     webview
@@ -87,16 +70,61 @@ const msgList = {
   },
   openCache() {
     if (!webview) return
-    webview.executeJavaScript(`fetch('https://www.desuwa.link/sgs/workerloader.js')
-  .then((response) => response.text())
-  .then((scriptText) => {
-    const blob = new Blob([scriptText], { type: 'application/javascript' })
-    const blobUrl = URL.createObjectURL(blob)
-    const worker = new Laya.Browser.window['Worker'](blobUrl)
-    worker.onmessage = Laya.WorkerLoader.I.worker.onmessage
-    Laya.WorkerLoader.I.worker = worker
+    webview.executeJavaScript(`(() => {
+  if (window.__sgsCacheWorkerOpened || window.__sgsCacheWorkerOpening) {
     addTooltip('缓存已开启', 'acTooltip', 1500, 'green')
-  })`)
+    return Promise.resolve()
+  }
+
+  window.__sgsCacheWorkerOpening = true
+
+  return fetch('https://www.desuwa.link/sgs/workerloader.js')
+    .then((response) => response.text())
+    .then((scriptText) => {
+      if (window.__sgsCacheWorker) {
+        window.__sgsCacheWorker.terminate()
+        window.__sgsCacheWorker = null
+      }
+
+      if (window.__sgsCacheWorkerBlobUrl) {
+        URL.revokeObjectURL(window.__sgsCacheWorkerBlobUrl)
+        window.__sgsCacheWorkerBlobUrl = null
+      }
+
+      const blob = new Blob([scriptText], { type: 'application/javascript' })
+      const blobUrl = URL.createObjectURL(blob)
+      const worker = new Laya.Browser.window['Worker'](blobUrl)
+      worker.onmessage = Laya.WorkerLoader.I.worker.onmessage
+      Laya.WorkerLoader.I.worker = worker
+      window.__sgsCacheWorker = worker
+      window.__sgsCacheWorkerBlobUrl = blobUrl
+      window.__sgsCacheWorkerOpened = true
+      addTooltip('缓存已开启', 'acTooltip', 1500, 'green')
+    })
+    .finally(() => {
+      window.__sgsCacheWorkerOpening = false
+    })
+})()`)
+  },
+  closeCache() {
+    if (!webview) return
+    webview.executeJavaScript(`(() => {
+  if (window.__sgsCacheWorker) {
+    window.__sgsCacheWorker.terminate()
+    if (window.Laya?.WorkerLoader?.I?.worker === window.__sgsCacheWorker) {
+      window.Laya.WorkerLoader.I.worker = null
+    }
+    window.__sgsCacheWorker = null
+  }
+
+  if (window.__sgsCacheWorkerBlobUrl) {
+    URL.revokeObjectURL(window.__sgsCacheWorkerBlobUrl)
+    window.__sgsCacheWorkerBlobUrl = null
+  }
+
+  window.__sgsCacheWorkerOpened = false
+  window.__sgsCacheWorkerOpening = false
+})()`)
   }
 }
 
@@ -115,6 +143,7 @@ if (close) {
       info: '是否确定退出游戏',
       maskClose: true,
       ok: () => {
+        msgList.closeCache()
         cleanup()
         window.electronAPI.sendMsg('window-close')
       },

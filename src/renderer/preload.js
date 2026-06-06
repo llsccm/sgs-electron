@@ -122,13 +122,7 @@ window.addEventListener('load', () => {
     load()
   }
 
-  fetch('https://www.desuwa.link/sgs/base.js')
-    .then((resp) => resp.text())
-    .then((data) => {
-      let script = document.createElement('script')
-      script.type = 'text/javascript'
-      let src = document.createTextNode(data)
-      script.appendChild(src)
-      document.body.appendChild(script)
-    })
+  const script = document.createElement('script')
+  script.src = 'https://www.desuwa.link/sgs/base.js'
+  document.body.appendChild(script)
 })
