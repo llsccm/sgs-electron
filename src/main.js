@@ -4,7 +4,7 @@ const ipcEvent = require('./electron/ipcEvent')
 const createWindow = require('./electron/window')
 const interceptor = require('./electron/interceptor')
 
-app.commandLine.appendSwitch('disk-cache-size', '1610612736')
+app.commandLine.appendSwitch('disk-cache-size', '2147483648')
 app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // 中文环境下不能替换字体

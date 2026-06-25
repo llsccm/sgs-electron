@@ -55,7 +55,7 @@ const msgList = {
     if (!webview) return
     webview
       .executeJavaScript(
-        `fetch("https://www.desuwa.link/sgs/daxiaochao.user.js").then(resp => resp.text())
+        `fetch("https://llsccm.github.io/sgstools/daxiaochao.user.js").then(resp => resp.text())
       .then(data => {
         let script = document.createElement('script')
         script.type = 'text/javascript'
