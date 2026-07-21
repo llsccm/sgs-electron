@@ -2,18 +2,18 @@ window.addEventListener('load', () => {
   window.WDVerSion = '1.0.0'
   console.info('--wd-- ', window.location)
 
-  fetch('https://cas.dobest.cn/cas/logout?url=https%3A%2F%2Fweb.sanguosha.com%2Findex.html', {
-    referrer: 'https://web.sanguosha.com/',
-    referrerPolicy: 'strict-origin-when-cross-origin',
-    body: null,
-    method: 'GET',
-    mode: 'no-cors',
-    credentials: 'include'
-  })
-    .then((response) => response.json())
-    .catch((err) => console.log('退出登录'))
-
   if (window.location.pathname === '/login/air/client/h5/index') {
+    fetch('https://cas.dobest.cn/cas/logout?url=https%3A%2F%2Fweb.sanguosha.com%2Findex.html', {
+      referrer: 'https://web.sanguosha.com/',
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      body: null,
+      method: 'GET',
+      mode: 'no-cors',
+      credentials: 'include'
+    })
+      .then((response) => response.json())
+      .catch((err) => console.log('退出登录'))
+
     const userProto = document.querySelector('#SGS_userProto')
     userProto.parentNode.classList.add('on')
     userProto.checked = !0
@@ -64,7 +64,13 @@ window.addEventListener('load', () => {
           let li = document.createElement('li')
           li.dataset.index = index
           li.innerHTML =
-            '<span data-index="' + index + '">' + item.account + '</span><button class="button--danger" data-index="' + index + '">X</button>'
+            '<span data-index="' +
+            index +
+            '">' +
+            item.account +
+            '</span><button class="button--danger" data-index="' +
+            index +
+            '">X</button>'
           li.addEventListener('click', clickCb)
           ul.appendChild(li)
         })
