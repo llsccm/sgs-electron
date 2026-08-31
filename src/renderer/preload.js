@@ -1,5 +1,10 @@
+const { contextBridge } = require('electron')
+
+contextBridge.exposeInMainWorld('electron', {
+  WDVerSion: '1.0.0'
+})
+
 window.addEventListener('load', () => {
-  window.WDVerSion = '1.0.0'
   console.info('--wd-- ', window.location)
   localStorage.removeItem('$SGS_LOGIN_TOKEN')
 

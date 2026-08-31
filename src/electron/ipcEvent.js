@@ -45,11 +45,7 @@ module.exports = {
     //接收最大化命令
     ipcMain.on('window-max', function (e) {
       const win = BrowserWindow.fromWebContents(e.sender)
-      if (win.isMaximized()) {
-        win.restore()
-      } else {
-        win.maximize()
-      }
+      win.isMaximized() ? win.unmaximize() : win.maximize()
     })
 
     //

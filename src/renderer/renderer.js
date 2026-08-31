@@ -12,7 +12,7 @@ const urlList = [
 ]
 
 const webview = document.getElementById('wb')
-
+// https://llsccm.github.io/sgstools/daxiaochao.user.js
 const msgList = {
   changeSize() {
     if (!webview) return
