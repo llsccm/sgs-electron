@@ -6,7 +6,6 @@ contextBridge.exposeInMainWorld('electron', {
 
 window.addEventListener('load', () => {
   console.info('--wd-- ', window.location)
-  localStorage.removeItem('$SGS_LOGIN_TOKEN')
 
   if (window.location.pathname === '/login/air/client/h5/index') {
     const userProto = document.querySelector('#SGS_userProto')
@@ -16,6 +15,18 @@ window.addEventListener('load', () => {
     const loginbtn = document.querySelector('#SGS_login-btn')
     loginbtn.removeAttribute('disabled')
     loginbtn.classList.remove('SGS_loginbtn-disable')
+
+    const remember = document.querySelector('#SGS_login-remember')
+    if (remember) {
+      if (localStorage.getItem('SGS_login-remember_checked') === 'true') {
+        remember.checked = !0
+        remember.parentNode.classList.add('on')
+      }
+
+      remember.addEventListener('change', () => {
+        localStorage.setItem('SGS_login-remember_checked', remember.checked)
+      })
+    }
 
     console.log('加载密码管理')
 
@@ -121,6 +132,12 @@ window.addEventListener('load', () => {
 
     let userlist = getData()
     load()
+
+    return
+  }
+
+  if (localStorage.getItem('SGS_login-remember_checked') !== 'true') {
+    localStorage.removeItem('$SGS_LOGIN_TOKEN')
   }
 
   const script = document.createElement('script')
