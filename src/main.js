@@ -9,6 +9,8 @@ app.commandLine.appendSwitch('--enable-webgl')
 app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // 中文环境下不能替换字体
 app.commandLine.appendSwitch('lang', 'en')
+// 强制直连
+app.commandLine.appendSwitch('no-proxy-server')
 // app.allowRendererProcessReuse = false
 
 const gotTheLock = app.requestSingleInstanceLock()
